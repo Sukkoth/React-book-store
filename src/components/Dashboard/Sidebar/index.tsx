@@ -2,6 +2,9 @@ import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import SettingsIcon from "@mui/icons-material/Settings";
 import PersonIcon from "@mui/icons-material/Person";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { Box } from "@mui/material";
 
 import SidebarGroup from "./SidebarGroup";
 import SidebarHeader from "./SidebarHeader";
@@ -20,16 +23,29 @@ function Sidebar() {
       <SidebarHeader />
       {/* sidebar content */}
 
-      <SidebarGroup>
-        {sidebarItems.map((item) => (
-          <SidebarItem
-            key={item.label}
-            label={item.label}
-            href={item.href}
-            icon={item.icon}
-          />
-        ))}
-      </SidebarGroup>
+      <Box>
+        <SidebarGroup>
+          {sidebarItems.map((item) => (
+            <SidebarItem
+              key={item.label}
+              label={item.label}
+              href={item.href}
+              icon={item.icon}
+            />
+          ))}
+        </SidebarGroup>
+
+        <SidebarGroup>
+          {sidebarItems2.map((item) => (
+            <SidebarItem
+              key={item.label}
+              label={item.label}
+              href={item.href}
+              icon={item.icon}
+            />
+          ))}
+        </SidebarGroup>
+      </Box>
 
       {/* sidebar footer */}
 
@@ -57,27 +73,22 @@ const sidebarItems = [
     icon: <PersonIcon />,
     href: "/dashboard/admin/owners",
   },
+];
+
+const sidebarItems2 = [
+  {
+    label: "Notifications",
+    icon: <NotificationsIcon />,
+    href: "/dashboard/admin/notifications",
+  },
   {
     label: "Settings",
     icon: <SettingsIcon />,
-    href: "/settings",
+    href: "/dashboard/admin/settings",
+  },
+  {
+    label: "Login as Book Owner",
+    icon: <AccountCircleIcon />,
+    href: "/auth/login/owner",
   },
 ];
-
-// const sidebarItems2 = [
-//   {
-//     label: "Analytics",
-//     // icon: <FaChartLine />,
-//     href: "/analytics",
-//   },
-//   {
-//     label: "Messages",
-//     // icon: <FaEnvelope />,
-//     href: "/messages",
-//   },
-//   {
-//     label: "Library",
-//     // icon: <GiBookCover />,
-//     href: "/library",
-//   },
-// ];
