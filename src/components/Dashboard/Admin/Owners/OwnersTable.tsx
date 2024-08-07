@@ -148,7 +148,7 @@ const OwnersTable = () => {
   return (
     <Paper
       sx={{
-        height: "80dvh",
+        height: "75dvh",
         overflowX: "auto",
         display: "grid",
         boxShadow: "none",
