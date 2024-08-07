@@ -1,25 +1,31 @@
-import { useMemo } from "react";
+import { bookOwners } from "@/_data/booksList";
+import { Delete, Visibility } from "@mui/icons-material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Input,
+  Paper,
+  Switch,
+  TableContainer,
+} from "@mui/material";
 import {
   MaterialReactTable,
   useMaterialReactTable,
   type MRT_ColumnDef,
 } from "material-react-table";
-import { bookOwners, booksListAdmin } from "@/_data/booksList";
-import {
-  Box,
-  Button,
-  IconButton,
-  MenuItem,
-  Paper,
-  Switch,
-  TableContainer,
-  Typography,
-} from "@mui/material";
-import { Delete, Visibility } from "@mui/icons-material";
+import { useMemo, useState } from "react";
+import ViewModal from "./ViewModal";
 
-type BookOwner = {
+export type BookOwner = {
   id: number;
-  owner: { approved: boolean; name: string; imageUrl: string };
+  owner: {
+    approved: boolean;
+    name: string;
+    imageUrl: string;
+    phone: string;
+    email: string;
+  };
   upload: number;
   location: string;
   status: boolean;
@@ -28,6 +34,10 @@ type BookOwner = {
 const data: BookOwner[] = bookOwners;
 
 const OwnersTable = () => {
+  const [viewOwnerData, setViewOwnerData] = useState<null | BookOwner>(null);
+  const handleSetViewOwnerData = (owner: BookOwner) => setViewOwnerData(owner);
+  const handleCloseModal = () => setViewOwnerData(null);
+
   const columns = useMemo<MRT_ColumnDef<BookOwner>[]>(
     () => [
       {
@@ -38,6 +48,8 @@ const OwnersTable = () => {
           const cellData = cell.getValue<{
             name: string;
             imageUrl: string;
+            email: string;
+            phone: string;
           }>();
           return (
             <div className='flex gap-3 items-center'>
@@ -49,6 +61,15 @@ const OwnersTable = () => {
               <p>{cellData.name}</p>
             </div>
           );
+        },
+        Edit: ({ cell, column, row, table }) => {
+          const cellData = cell.getValue<{
+            name: string;
+            imageUrl: string;
+            email: string;
+            phone: string;
+          }>();
+          return <Input value={cellData.name} />;
         },
       },
       {
@@ -91,11 +112,17 @@ const OwnersTable = () => {
     data,
     enableRowActions: true,
     positionActionsColumn: "last",
-    renderRowActions: ({ row }) => {
+    renderRowActions: ({ cell, row }) => {
       type ownerType = { approved: boolean; name: string; imageUrl: string };
+      const bookOwner = cell.row.original;
+
       return (
         <Box>
-          <IconButton onClick={() => console.info("Edit")}>
+          <IconButton
+            onClick={() => {
+              handleSetViewOwnerData(bookOwner);
+            }}
+          >
             <Visibility color='action' />
           </IconButton>
           <IconButton onClick={() => console.info("Delete")}>
@@ -129,6 +156,14 @@ const OwnersTable = () => {
       }}
     >
       <TableContainer component={Paper} elevation={0}>
+        {/* View details in modal */}
+        {Boolean(viewOwnerData) && (
+          <ViewModal
+            handleCloseModal={handleCloseModal}
+            bookOwner={viewOwnerData!}
+          />
+        )}
+        {/* view all info in table */}
         <MaterialReactTable table={table} />
       </TableContainer>
     </Paper>

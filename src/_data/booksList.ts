@@ -363,6 +363,8 @@ export const bookOwners = [
     owner: {
       approved: false,
       name: "John Smith",
+      email: "email@gamil.com",
+      phone: "0909091212",
       imageUrl: "https://via.placeholder.com/150",
     },
     upload: 5,
@@ -374,6 +376,8 @@ export const bookOwners = [
     owner: {
       approved: false,
       name: "Jane Doe",
+      email: "email@gamil.com",
+      phone: "0909091212",
       imageUrl: "https://via.placeholder.com/150",
     },
     upload: 8,
@@ -385,6 +389,8 @@ export const bookOwners = [
     owner: {
       approved: false,
       name: "Alice Johnson",
+      email: "email@gamil.com",
+      phone: "0909091212",
       imageUrl: "https://via.placeholder.com/150",
     },
     upload: 3,
@@ -396,6 +402,8 @@ export const bookOwners = [
     owner: {
       approved: false,
       name: "Bob Brown",
+      email: "email@gamil.com",
+      phone: "0909091212",
       imageUrl: "https://via.placeholder.com/150",
     },
     upload: 7,
@@ -407,6 +415,8 @@ export const bookOwners = [
     owner: {
       approved: true,
       name: "Charlie Davis",
+      email: "email@gamil.com",
+      phone: "0909091212",
       imageUrl: "https://via.placeholder.com/150",
     },
     upload: 4,
@@ -418,6 +428,8 @@ export const bookOwners = [
     owner: {
       approved: true,
       name: "Diana Evans",
+      email: "email@gamil.com",
+      phone: "0909091212",
       imageUrl: "https://via.placeholder.com/150",
     },
     upload: 6,
@@ -429,6 +441,8 @@ export const bookOwners = [
     owner: {
       approved: true,
       name: "Edward Wilson",
+      email: "email@gamil.com",
+      phone: "0909091212",
       imageUrl: "https://via.placeholder.com/150",
     },
     upload: 2,
@@ -440,6 +454,8 @@ export const bookOwners = [
     owner: {
       approved: true,
       name: "Fiona Harris",
+      email: "email@gamil.com",
+      phone: "0909091212",
       imageUrl: "https://via.placeholder.com/150",
     },
     upload: 9,
@@ -451,6 +467,8 @@ export const bookOwners = [
     owner: {
       approved: true,
       name: "George King",
+      email: "email@gamil.com",
+      phone: "0909091212",
       imageUrl: "https://via.placeholder.com/150",
     },
     upload: 10,
@@ -462,6 +480,8 @@ export const bookOwners = [
     owner: {
       approved: true,
       name: "Hannah Wright",
+      email: "email@gamil.com",
+      phone: "0909091212",
       imageUrl: "https://via.placeholder.com/150",
     },
     upload: 1,
@@ -473,6 +493,8 @@ export const bookOwners = [
     owner: {
       approved: true,
       name: "Ian Turner",
+      email: "email@gamil.com",
+      phone: "0909091212",
       imageUrl: "https://via.placeholder.com/150",
     },
     upload: 11,
@@ -484,6 +506,8 @@ export const bookOwners = [
     owner: {
       approved: true,
       name: "Jane Young",
+      email: "email@gamil.com",
+      phone: "0909091212",
       imageUrl: "https://via.placeholder.com/150",
     },
     upload: 12,
@@ -495,6 +519,8 @@ export const bookOwners = [
     owner: {
       approved: true,
       name: "Kevin Adams",
+      email: "email@gamil.com",
+      phone: "0909091212",
       imageUrl: "https://via.placeholder.com/150",
     },
     upload: 13,
@@ -506,6 +532,8 @@ export const bookOwners = [
     owner: {
       approved: true,
       name: "Laura Hill",
+      email: "email@gamil.com",
+      phone: "0909091212",
       imageUrl: "https://via.placeholder.com/150",
     },
     upload: 14,
@@ -517,6 +545,8 @@ export const bookOwners = [
     owner: {
       approved: true,
       name: "Michael Scott",
+      email: "email@gamil.com",
+      phone: "0909091212",
       imageUrl: "https://via.placeholder.com/150",
     },
     upload: 15,
@@ -528,6 +558,8 @@ export const bookOwners = [
     owner: {
       approved: true,
       name: "Nina Clark",
+      email: "email@gamil.com",
+      phone: "0909091212",
       imageUrl: "https://via.placeholder.com/150",
     },
     upload: 16,
@@ -539,6 +571,8 @@ export const bookOwners = [
     owner: {
       approved: true,
       name: "Oliver Lewis",
+      email: "email@gamil.com",
+      phone: "0909091212",
       imageUrl: "https://via.placeholder.com/150",
     },
     upload: 17,
@@ -550,6 +584,8 @@ export const bookOwners = [
     owner: {
       approved: true,
       name: "Paula Robinson",
+      email: "email@gamil.com",
+      phone: "0909091212",
       imageUrl: "https://via.placeholder.com/150",
     },
     upload: 18,
@@ -561,6 +597,8 @@ export const bookOwners = [
     owner: {
       approved: true,
       name: "Quentin Hall",
+      email: "email@gamil.com",
+      phone: "0909091212",
       imageUrl: "https://via.placeholder.com/150",
     },
     upload: 19,
@@ -572,6 +610,8 @@ export const bookOwners = [
     owner: {
       approved: true,
       name: "Rachel Lee",
+      email: "email@gamil.com",
+      phone: "0909091212",
       imageUrl: "https://via.placeholder.com/150",
     },
     upload: 20,

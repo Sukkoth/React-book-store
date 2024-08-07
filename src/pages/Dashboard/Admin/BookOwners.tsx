@@ -9,7 +9,7 @@ function BookOwners() {
           fontWeight: "500",
         }}
       >
-        Live Book Status
+        List of owners
       </Typography>
       <OwnersTable />
     </div>
