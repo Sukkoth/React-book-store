@@ -3,7 +3,7 @@ import { Typography } from "@mui/material";
 
 function Books() {
   return (
-    <div className='bg-white w-full p-5 rounded-xl shadow-lg shadow-gray-100 pt-10 h-full overflow-scroll'>
+    <div className='bg-white w-full p-5 rounded-xl shadow-lg shadow-gray-100 pt-10 h-full overflow-auto'>
       <Typography
         sx={{
           fontWeight: "500",

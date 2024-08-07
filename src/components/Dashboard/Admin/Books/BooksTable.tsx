@@ -64,16 +64,18 @@ const BooksTable = () => {
         header: "Status",
         Cell: ({ cell }) => (
           <span
-            className={`grid lg:grid-cols-2 text-end items-center w-fit px-4 rounded-xl ${
+            className={`grid grid-cols-2 text-end items-center w-36 px-3 py-1 rounded-2xl ${
               cell.getValue()
                 ? "bg-green-200 text-green-800"
                 : "bg-red-200 text-red-800"
             }`}
           >
-            <span className='hidden lg:block'>
-              {cell.getValue() ? "Active" : "Inactive"}
-            </span>
-            <Switch defaultChecked={cell.getValue<boolean>()} color='success' />
+            <span>{cell.getValue() ? "Active" : "Inactive"}</span>
+            <Switch
+              defaultChecked={cell.getValue<boolean>()}
+              color='success'
+              size='small'
+            />
           </span>
         ),
         size: 100,
@@ -91,7 +93,7 @@ const BooksTable = () => {
   return (
     <Paper
       sx={{
-        height: "80dvh",
+        height: "72dvh",
         overflowX: "auto",
         display: "grid",
         boxShadow: "none",
