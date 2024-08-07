@@ -1,6 +1,7 @@
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import SettingsIcon from "@mui/icons-material/Settings";
+import PersonIcon from "@mui/icons-material/Person";
 
 import SidebarGroup from "./SidebarGroup";
 import SidebarHeader from "./SidebarHeader";
@@ -50,6 +51,11 @@ const sidebarItems = [
     label: "Books",
     icon: <LibraryBooksIcon />,
     href: "/dashboard/admin/books",
+  },
+  {
+    label: "Owners",
+    icon: <PersonIcon />,
+    href: "/dashboard/admin/owners",
   },
   {
     label: "Settings",

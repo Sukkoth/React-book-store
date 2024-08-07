@@ -356,3 +356,226 @@ export const booksListAdmin = [
     bookName: "Les Misérables",
   },
 ];
+
+export const bookOwners = [
+  {
+    id: 1,
+    owner: {
+      approved: false,
+      name: "John Smith",
+      imageUrl: "https://via.placeholder.com/150",
+    },
+    upload: 5,
+    location: "New York",
+    status: true,
+  },
+  {
+    id: 2,
+    owner: {
+      approved: false,
+      name: "Jane Doe",
+      imageUrl: "https://via.placeholder.com/150",
+    },
+    upload: 8,
+    location: "Los Angeles",
+    status: false,
+  },
+  {
+    id: 3,
+    owner: {
+      approved: false,
+      name: "Alice Johnson",
+      imageUrl: "https://via.placeholder.com/150",
+    },
+    upload: 3,
+    location: "Chicago",
+    status: true,
+  },
+  {
+    id: 4,
+    owner: {
+      approved: false,
+      name: "Bob Brown",
+      imageUrl: "https://via.placeholder.com/150",
+    },
+    upload: 7,
+    location: "Houston",
+    status: false,
+  },
+  {
+    id: 5,
+    owner: {
+      approved: true,
+      name: "Charlie Davis",
+      imageUrl: "https://via.placeholder.com/150",
+    },
+    upload: 4,
+    location: "Phoenix",
+    status: true,
+  },
+  {
+    id: 6,
+    owner: {
+      approved: true,
+      name: "Diana Evans",
+      imageUrl: "https://via.placeholder.com/150",
+    },
+    upload: 6,
+    location: "Philadelphia",
+    status: false,
+  },
+  {
+    id: 7,
+    owner: {
+      approved: true,
+      name: "Edward Wilson",
+      imageUrl: "https://via.placeholder.com/150",
+    },
+    upload: 2,
+    location: "San Antonio",
+    status: true,
+  },
+  {
+    id: 8,
+    owner: {
+      approved: true,
+      name: "Fiona Harris",
+      imageUrl: "https://via.placeholder.com/150",
+    },
+    upload: 9,
+    location: "San Diego",
+    status: false,
+  },
+  {
+    id: 9,
+    owner: {
+      approved: true,
+      name: "George King",
+      imageUrl: "https://via.placeholder.com/150",
+    },
+    upload: 10,
+    location: "Dallas",
+    status: true,
+  },
+  {
+    id: 10,
+    owner: {
+      approved: true,
+      name: "Hannah Wright",
+      imageUrl: "https://via.placeholder.com/150",
+    },
+    upload: 1,
+    location: "San Jose",
+    status: false,
+  },
+  {
+    id: 11,
+    owner: {
+      approved: true,
+      name: "Ian Turner",
+      imageUrl: "https://via.placeholder.com/150",
+    },
+    upload: 11,
+    location: "Austin",
+    status: true,
+  },
+  {
+    id: 12,
+    owner: {
+      approved: true,
+      name: "Jane Young",
+      imageUrl: "https://via.placeholder.com/150",
+    },
+    upload: 12,
+    location: "Jacksonville",
+    status: false,
+  },
+  {
+    id: 13,
+    owner: {
+      approved: true,
+      name: "Kevin Adams",
+      imageUrl: "https://via.placeholder.com/150",
+    },
+    upload: 13,
+    location: "San Francisco",
+    status: true,
+  },
+  {
+    id: 14,
+    owner: {
+      approved: true,
+      name: "Laura Hill",
+      imageUrl: "https://via.placeholder.com/150",
+    },
+    upload: 14,
+    location: "Columbus",
+    status: false,
+  },
+  {
+    id: 15,
+    owner: {
+      approved: true,
+      name: "Michael Scott",
+      imageUrl: "https://via.placeholder.com/150",
+    },
+    upload: 15,
+    location: "Indianapolis",
+    status: true,
+  },
+  {
+    id: 16,
+    owner: {
+      approved: true,
+      name: "Nina Clark",
+      imageUrl: "https://via.placeholder.com/150",
+    },
+    upload: 16,
+    location: "Charlotte",
+    status: false,
+  },
+  {
+    id: 17,
+    owner: {
+      approved: true,
+      name: "Oliver Lewis",
+      imageUrl: "https://via.placeholder.com/150",
+    },
+    upload: 17,
+    location: "Seattle",
+    status: true,
+  },
+  {
+    id: 18,
+    owner: {
+      approved: true,
+      name: "Paula Robinson",
+      imageUrl: "https://via.placeholder.com/150",
+    },
+    upload: 18,
+    location: "Denver",
+    status: false,
+  },
+  {
+    id: 19,
+    owner: {
+      approved: true,
+      name: "Quentin Hall",
+      imageUrl: "https://via.placeholder.com/150",
+    },
+    upload: 19,
+    location: "Washington",
+    status: true,
+  },
+  {
+    id: 20,
+    owner: {
+      approved: true,
+      name: "Rachel Lee",
+      imageUrl: "https://via.placeholder.com/150",
+    },
+    upload: 20,
+    location: "Boston",
+    status: false,
+  },
+];

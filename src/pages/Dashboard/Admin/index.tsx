@@ -2,6 +2,7 @@ import BookStatus from "@/components/Dashboard/Admin/BookStatus";
 import DailyStats from "../../../components/Dashboard/Admin/DailyStats";
 
 function index() {
+  console.log("Hello");
   return (
     <div className='grid xl:grid-cols-[auto_1fr] gap-5 h-full overflow-hidden'>
       {/* stats */}
