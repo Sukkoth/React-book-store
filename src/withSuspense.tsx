@@ -1,5 +1,6 @@
 import { ComponentType, Suspense, ReactNode } from "react";
 import MainFallback from "./Fallbacks/MainFallback";
+import DashboardFallback from "@/Fallbacks/DashboardFallback";
 
 export interface withSuspenseProps {
   children?: ReactNode;
@@ -7,14 +8,13 @@ export interface withSuspenseProps {
 
 function withSuspense<P extends withSuspenseProps>(
   LazyComponent: ComponentType<P>,
-  componentType: "main" | "explorer" | "app" = "main"
+  componentType: "main" | "dashboard" = "main"
 ): ComponentType<P> {
   const FallbackComponents: {
     [key: string]: ReactNode;
   } = {
     main: <MainFallback />,
-    app: <MainFallback />,
-    explorer: <MainFallback />,
+    dashboard: <DashboardFallback />,
   };
 
   return (props: P) => (
