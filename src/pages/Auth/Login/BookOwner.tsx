@@ -1,9 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import BookRentAuthHeader from "../../../components/Auth/BookRentAuthHeader";
 import { Button, Checkbox, FormControlLabel, TextField } from "@mui/material";
 import { Link as MaterialLink } from "@mui/material";
 
 function BookOwner() {
+  const navigate = useNavigate();
   return (
     <div className='h-full w-full flex flex-col items-center justify-center'>
       <div className='w-[80%] sm:w-[70%] mx-auto'>
@@ -33,6 +34,7 @@ function BookOwner() {
 
           <div className='mt-10'>
             <Button
+              onClick={() => navigate("/dashboard/owner")}
               color='primary'
               sx={{
                 width: "100%",
@@ -47,10 +49,7 @@ function BookOwner() {
 
         <div className='mt-5 text-center'>
           <p className='text-lg'>
-            Don't have an account?{" "}
-            <Link to={"/auth/signup"}>
-              <MaterialLink>Signup</MaterialLink>
-            </Link>
+            Don't have an account? <Link to={"/auth/signup"}>Signup</Link>
           </p>
         </div>
       </div>

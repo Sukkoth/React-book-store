@@ -1,0 +1,39 @@
+@font-face {
+  font-family: "Graphik";
+  src: url("https://www.etsy.com/assets/type/Graphik-Regular-Web.woff2")
+    format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Graphik";
+  src: url("https://www.etsy.com/assets/type/Graphik-Medium-Web.woff2")
+    format("woff2");
+  font-weight: 500;
+  font-style: normal;
+}
+
+.hover-gray {
+  @apply after:bg-gray-200 hover:cursor-pointer hover:rounded-3xl relative after:left-1/2 after:right-1/2 after:duration-[150] after:transition-all hover:after:-top-2 hover:after:-bottom-2 hover:after:-left-4 hover:after:-right-4 after:rounded-3xl after:absolute after:-z-10;
+}
+
+.hover-gray-stay {
+  @apply after:bg-gray-200 hover:after:bg-gray-300 hover:cursor-pointer hover:rounded-3xl relative after:duration-[150] after:transition-all after:-top-2 after:-bottom-2 after:-left-4 after:-right-4 after:rounded-3xl after:absolute after:-z-10 w-fit;
+}
+
+.hover-info {
+  @apply hover:after:bg-blue-500/30 hover:text-blue-900 hover:cursor-pointer hover:rounded-3xl relative after:duration-300 after:transition-all after:-inset-3 after:rounded-full after:absolute after:-z-10;
+}
+
+.ui-font {
+  font-family: "Graphik", sans-serif;
+}
+
+.ui-btn-base {
+  @apply rounded-3xl border-gray-800 border-2 transition-all hover:shadow-md hover:shadow-gray-500 px-2 text-[14px] font-medium cursor-pointer;
+}
+
+.ui-btn {
+  @apply ui-btn-base sm:px-8 py-3 font-medium text-[14px] md:text-[16px];
+}

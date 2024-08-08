@@ -13,7 +13,7 @@ import SidebarLogoutButton from "./SidebarLogoutButton";
 import { useSidebar } from "./SidebarProvider";
 
 function Sidebar() {
-  const { showIconsOnly } = useSidebar();
+  const { showIconsOnly, userType } = useSidebar();
   return (
     <div
       className={` bg-midnight-950 text-white rounded-md p-6 ${
@@ -24,30 +24,21 @@ function Sidebar() {
       {/* sidebar content */}
 
       <Box>
-        <SidebarGroup>
-          {sidebarItems.map((item) => (
-            <SidebarItem
-              key={item.label}
-              label={item.label}
-              href={item.href}
-              icon={item.icon}
-            />
-          ))}
-        </SidebarGroup>
-
-        <SidebarGroup>
-          {sidebarItems2.map((item) => (
-            <SidebarItem
-              key={item.label}
-              label={item.label}
-              href={item.href}
-              icon={item.icon}
-            />
-          ))}
-        </SidebarGroup>
+        {[...(userType === "admin" ? adminItems : ownerItems)].map(
+          (menuList, index) => (
+            <SidebarGroup key={`menuList-${index}`}>
+              {menuList.map((menuItem) => (
+                <SidebarItem
+                  key={menuItem.label}
+                  label={menuItem.label}
+                  href={menuItem.href}
+                  icon={menuItem.icon}
+                />
+              ))}
+            </SidebarGroup>
+          )
+        )}
       </Box>
-
-      {/* sidebar footer */}
 
       <SidebarLogoutButton />
     </div>
@@ -56,39 +47,71 @@ function Sidebar() {
 
 export default Sidebar;
 
-//vary this data based on pathname
-const sidebarItems = [
-  {
-    label: "Dashboard",
-    icon: <SpaceDashboardIcon />,
-    href: "/dashboard/admin",
-  },
-  {
-    label: "Books",
-    icon: <LibraryBooksIcon />,
-    href: "/dashboard/admin/books",
-  },
-  {
-    label: "Owners",
-    icon: <PersonIcon />,
-    href: "/dashboard/admin/owners",
-  },
+const adminItems = [
+  [
+    {
+      label: "Dashboard",
+      icon: <SpaceDashboardIcon />,
+      href: "/dashboard/admin",
+    },
+    {
+      label: "Books",
+      icon: <LibraryBooksIcon />,
+      href: "/dashboard/admin/books",
+    },
+    {
+      label: "Owners",
+      icon: <PersonIcon />,
+      href: "/dashboard/admin/owners",
+    },
+  ],
+  [
+    {
+      label: "Notifications",
+      icon: <NotificationsIcon />,
+      href: "/dashboard/admin/notifications",
+    },
+    {
+      label: "Settings",
+      icon: <SettingsIcon />,
+      href: "/dashboard/admin/settings",
+    },
+    {
+      label: "Login as Book Owner",
+      icon: <AccountCircleIcon />,
+      href: "/auth/login/owner",
+    },
+  ],
 ];
 
-const sidebarItems2 = [
-  {
-    label: "Notifications",
-    icon: <NotificationsIcon />,
-    href: "/dashboard/admin/notifications",
-  },
-  {
-    label: "Settings",
-    icon: <SettingsIcon />,
-    href: "/dashboard/admin/settings",
-  },
-  {
-    label: "Login as Book Owner",
-    icon: <AccountCircleIcon />,
-    href: "/auth/login/owner",
-  },
+const ownerItems = [
+  [
+    {
+      label: "Dashboard",
+      icon: <SpaceDashboardIcon />,
+      href: "/dashboard/owner",
+    },
+    {
+      label: "Books",
+      icon: <LibraryBooksIcon />,
+      href: "/dashboard/owner/books",
+    },
+  ],
+  [
+    {
+      label: "Notifications",
+      icon: <NotificationsIcon />,
+      href: "/dashboard/owner/notifications",
+    },
+    {
+      label: "Settings",
+      icon: <SettingsIcon />,
+      href: "/dashboard/owner/settings",
+    },
+    {
+      label: "Login as Admin",
+      icon: <AccountCircleIcon />,
+      href: "/auth/login/admin",
+    },
+  ],
 ];

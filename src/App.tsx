@@ -28,6 +28,14 @@ function App() {
           <Route path='books' element={<AppRoutes.admin.books />} />
           <Route path='owners' element={<AppRoutes.admin.owners />} />
         </Route>
+        <Route path='owner'>
+          <Route index element={<AppRoutes.owner.index />} />
+          <Route path='books' element={<AppRoutes.owner.books />} />
+        </Route>
+      </Route>
+      <Route path='ui'>
+        <Route path='list' element={<AppRoutes.ui.list />} />
+        <Route path='details' element={<AppRoutes.ui.details />} />
       </Route>
     </Routes>
   );
