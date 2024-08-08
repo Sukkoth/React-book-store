@@ -4,6 +4,7 @@ import "../../index.css";
 import "../../ui-challenge-styles.css";
 import SearchResultTopItem from "@/components/UIChallenge/SearchResultTopItem";
 import SearchFilter from "@/components/UIChallenge/SearchFilter";
+import ProductItem from "@/components/UIChallenge/ProductItem";
 
 function List() {
   useEffect(() => {
@@ -14,7 +15,7 @@ function List() {
       <Nav />
       <SearchResultTopItem />
       <SearchFilter />
-      {/* items list */}
+      <ProductItem />
     </main>
   );
 }
