@@ -65,5 +65,6 @@ export interface GetBooksRentResponse {
   pagination: {
     totalPages: number;
     pageSize: number;
+    totalCount: number;
   };
 }

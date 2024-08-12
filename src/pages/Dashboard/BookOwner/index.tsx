@@ -1,4 +1,4 @@
-import BookStatus from "@/components/Dashboard/Admin/BookStatus";
+import BookStatus from "@/components/Dashboard/BookStatus";
 import DailyStats from "../../../components/Dashboard/Admin/DailyStats";
 
 function index() {
