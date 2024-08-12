@@ -1,10 +1,42 @@
 import { Link, useNavigate } from "react-router-dom";
 import BookRentAuthHeader from "../../../components/Auth/BookRentAuthHeader";
-import { Button, Checkbox, FormControlLabel, TextField } from "@mui/material";
-import { Link as MaterialLink } from "@mui/material";
+import {
+  Button,
+  Checkbox,
+  FormControlLabel,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { useAuth } from "@/Providers/AuthProvider";
+import { useOwnerLogin } from "@/queries/mutations";
 
 function BookOwner() {
   const navigate = useNavigate();
+  const { handleSetToken, handleSetUser } = useAuth();
+  const loginOwner = useOwnerLogin();
+
+  async function handleLogin() {
+    try {
+      await loginOwner.mutateAsync(
+        {
+          email: "suukootj@gmail.com",
+          password: "password",
+          userType: "owner",
+        },
+        {
+          onSuccess: (data) => {
+            handleSetToken(data.token);
+            handleSetUser(data.user);
+          },
+        }
+      );
+
+      navigate("/dashboard/owner");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <div className='h-full w-full flex flex-col items-center justify-center'>
       <div className='w-[80%] sm:w-[70%] mx-auto'>
@@ -12,6 +44,9 @@ function BookOwner() {
         <h1 className='mt-5 md:mt-10 text-center md:text-start text-2xl md:text-4xl pb-1 border-b border-b-gray-200'>
           Login as Book Owner
         </h1>
+        <Typography color='darkorange' fontSize={12} marginTop={1}>
+          {loginOwner.error?.message}
+        </Typography>
         <form className='mt-5 space-y-5'>
           <TextField
             name='email'
@@ -34,15 +69,16 @@ function BookOwner() {
 
           <div className='mt-10'>
             <Button
-              onClick={() => navigate("/dashboard/owner")}
-              color='primary'
+              disabled={loginOwner.isPending}
+              onClick={handleLogin}
+              color={"primary"}
               sx={{
                 width: "100%",
                 paddingBlock: "0.8rem",
               }}
               variant='contained'
             >
-              Login
+              {loginOwner.isPending ? "Loging in . . . " : "Log in"}
             </Button>
           </div>
         </form>

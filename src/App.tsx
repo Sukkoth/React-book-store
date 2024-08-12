@@ -9,11 +9,14 @@ import "@fontsource/roboto/700.css";
 import AppRoutes from "@/Routes";
 import AuthLayout from "@/Layouts/AuthLayout";
 import DashboardLayout from "@/Layouts/DashboardLayout";
+import AuthOutlet from "./Layouts/AuthOutlet";
+import { useGetCategories } from "@/queries/queries";
 
 function App() {
+  useGetCategories();
   return (
     <Routes>
-      <Route index element={<h1>Hello World!</h1>} />
+      <Route index element={<AppRoutes.home.index />} />
       <Route path='/auth' element={<AuthLayout />}>
         <Route path='signup' element={<AppRoutes.auth.signup />} />
         <Route path='login'>
@@ -23,14 +26,16 @@ function App() {
         </Route>
       </Route>
       <Route path='dashboard' element={<DashboardLayout />}>
-        <Route path='admin'>
-          <Route index element={<AppRoutes.admin.index />} />
-          <Route path='books' element={<AppRoutes.admin.books />} />
-          <Route path='owners' element={<AppRoutes.admin.owners />} />
-        </Route>
-        <Route path='owner'>
-          <Route index element={<AppRoutes.owner.index />} />
-          <Route path='books' element={<AppRoutes.owner.books />} />
+        <Route element={<AuthOutlet />}>
+          <Route path='admin'>
+            <Route index element={<AppRoutes.admin.index />} />
+            <Route path='books' element={<AppRoutes.admin.books />} />
+            <Route path='owners' element={<AppRoutes.admin.owners />} />
+          </Route>
+          <Route path='owner'>
+            <Route index element={<AppRoutes.owner.index />} />
+            <Route path='books' element={<AppRoutes.owner.books />} />
+          </Route>
         </Route>
       </Route>
       <Route path='ui'>
