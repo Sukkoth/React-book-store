@@ -1,15 +1,16 @@
-import {
-  LOGIN_OWNER,
-  LoginCredentials,
-  LoginOwnerResponse,
-} from "@/services/authService";
+import { LOGIN, LoginCredentials, LoginResponse } from "@/services/authService";
 import { ADD_BOOK, ADD_RENT_BOOK } from "@/services/ownerServices/booksService";
 import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 
-export function useOwnerLogin() {
-  return useMutation<LoginOwnerResponse, Error, LoginCredentials>({
-    mutationFn: LOGIN_OWNER,
-    mutationKey: ["login", "owner"],
+export function useLogin() {
+  return useMutation<
+    LoginResponse,
+    AxiosError<{ code?: number; message?: string }>,
+    LoginCredentials
+  >({
+    mutationFn: LOGIN,
+    mutationKey: ["login"],
   });
 }
 

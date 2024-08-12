@@ -5,11 +5,17 @@ import {
   type MRT_ColumnDef,
 } from "material-react-table";
 import { booksList } from "@/_data/booksList";
+import { useGetBooksRentList } from "@/queries/queries";
+import MainFallback from "@/Fallbacks/MainFallback";
+import { Box, IconButton } from "@mui/material";
+import { Delete, Edit } from "@mui/icons-material";
+import { useAbility } from "@/Providers/AbilityProvider";
 
 type Book = {
   id: number;
+  name?: string;
   bookNo: string;
-  owner: {
+  owner?: {
     name: string;
     imageUrl: string;
   };
@@ -17,35 +23,66 @@ type Book = {
   price: number;
 };
 
-const data: Book[] = booksList;
-
 const BooksStatusTable = () => {
+  const abilities = useAbility();
+
+  const isEditor = abilities.can("edit", "books");
+
+  const fetchBooks = useGetBooksRentList({ forAdmin: !isEditor });
+  const data = fetchBooks.data
+    ? fetchBooks.data.map((bookItem) => {
+        const b: Book = {
+          id: bookItem.id,
+          bookNo: `${bookItem.id}`,
+          name: bookItem.bookInfo?.name || "DEFAULT BOOK",
+          owner: {
+            name: bookItem?.owner?.firstName || "",
+            imageUrl: "https://via.placeholder.com/180",
+          },
+          status: bookItem.status === "free" ? true : false,
+          price: bookItem.price,
+        };
+        return b;
+      })
+    : booksList;
+
   const columns = useMemo<MRT_ColumnDef<Book>[]>(
     () => [
       {
         accessorKey: "bookNo",
         header: "Book no.",
-        size: 100,
+        size: 30,
+        Cell: ({ cell }) => {
+          return (
+            <p className='bg-gray-200 text-center py-2 rounded-md '>
+              BOOK{cell.getValue<string | number>()}
+            </p>
+          );
+        },
       },
       {
-        accessorKey: "owner",
-        header: "Owner",
-        size: 100,
+        accessorKey: isEditor ? "name" : "owner",
+        header: isEditor ? "Book Name" : "Owner",
+        size: 220,
         Cell: ({ cell }) => {
-          const cellData = cell.getValue<{
-            name: string;
-            imageUrl: string;
-          }>();
-          return (
-            <div className='flex gap-3 items-center'>
-              <img
-                src={cellData.imageUrl}
-                alt=''
-                className='size-8 rounded-full'
-              />
-              <p>{cellData.name}</p>
-            </div>
-          );
+          if (isEditor) {
+            return <p>{cell.getValue<string>()}</p>;
+          } else {
+            const cellData = cell.getValue<{
+              name: string;
+              imageUrl: string;
+            }>();
+            return (
+              <div className='flex gap-3 items-center'>
+                <img
+                  src={cellData.imageUrl}
+                  alt=''
+                  className='size-8 rounded-full'
+                />
+                <p>{cellData.name}</p>
+              </div>
+            );
+          }
         },
       },
 
@@ -64,12 +101,12 @@ const BooksStatusTable = () => {
             {cell.getValue() ? "Free" : "Rented"}
           </div>
         ),
-        size: 100,
+        size: 220,
       },
       {
         accessorKey: "price",
         header: "Price",
-        size: 100,
+        size: 220,
         Cell: ({ cell }) => `${cell.getValue<string>()} Birr`,
       },
     ],
@@ -80,11 +117,29 @@ const BooksStatusTable = () => {
     enableRowNumbers: true,
     columns,
     data,
+    enableRowActions: isEditor,
+    positionActionsColumn: "last",
+    renderRowActions: () => {
+      return (
+        <Box sx={{ display: "flex" }}>
+          <IconButton>
+            <Edit color='action' />
+          </IconButton>
+          <IconButton onClick={() => console.info("Delete")}>
+            <Delete color='warning' />
+          </IconButton>
+        </Box>
+      );
+    },
   });
 
   return (
     <div className='w-full grid overflow-auto'>
-      <MaterialReactTable table={table} />
+      {fetchBooks.isPending ? (
+        <MainFallback />
+      ) : (
+        <MaterialReactTable table={table} />
+      )}
     </div>
   );
 };

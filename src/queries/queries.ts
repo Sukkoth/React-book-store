@@ -1,9 +1,15 @@
+import { GET_RENT_BOOKS } from "@/services/ownerServices/booksService";
 import {
   GET_BOOKS_LIST,
   GET_CATEGORIES,
   GET_CATEGORY_STATS,
 } from "@/services/services";
-import { BooksListResponse, Category, CategoryStatItem } from "@/Types/types";
+import {
+  BookRent,
+  BooksListResponse,
+  Category,
+  CategoryStatItem,
+} from "@/Types/types";
 import { useQuery } from "@tanstack/react-query";
 
 export function useCategoryStats() {
@@ -26,5 +32,12 @@ export function useGetBooksList({ name }: { name?: string }) {
   return useQuery<BooksListResponse>({
     queryKey: ["booksList"],
     queryFn: () => GET_BOOKS_LIST({ name }),
+  });
+}
+
+export function useGetBooksRentList({ forAdmin }: { forAdmin: boolean }) {
+  return useQuery<BookRent[]>({
+    queryKey: ["booksList"],
+    queryFn: () => GET_RENT_BOOKS({ forAdmin }),
   });
 }

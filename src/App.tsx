@@ -9,7 +9,8 @@ import "@fontsource/roboto/700.css";
 import AppRoutes from "@/Routes";
 import AuthLayout from "@/Layouts/AuthLayout";
 import DashboardLayout from "@/Layouts/DashboardLayout";
-import AuthOutlet from "./Layouts/AuthOutlet";
+import AuthOutlet from "@/Layouts/AuthOutlet";
+import CASLOutlet from "@/Layouts/CASLOutlet";
 import { useGetCategories } from "@/queries/queries";
 
 function App() {
@@ -27,12 +28,12 @@ function App() {
       </Route>
       <Route path='dashboard' element={<DashboardLayout />}>
         <Route element={<AuthOutlet />}>
-          <Route path='admin'>
+          <Route path='admin' element={<CASLOutlet type='admin' />}>
             <Route index element={<AppRoutes.admin.index />} />
             <Route path='books' element={<AppRoutes.admin.books />} />
             <Route path='owners' element={<AppRoutes.admin.owners />} />
           </Route>
-          <Route path='owner'>
+          <Route path='owner' element={<CASLOutlet type='owner' />}>
             <Route index element={<AppRoutes.owner.index />} />
             <Route path='books' element={<AppRoutes.owner.books />} />
           </Route>

@@ -8,12 +8,12 @@ import {
   Typography,
 } from "@mui/material";
 import { useAuth } from "@/Providers/AuthProvider";
-import { useOwnerLogin } from "@/queries/mutations";
+import { useLogin } from "@/queries/mutations";
 
 function BookOwner() {
   const navigate = useNavigate();
   const { handleSetToken, handleSetUser } = useAuth();
-  const loginOwner = useOwnerLogin();
+  const loginOwner = useLogin();
 
   async function handleLogin() {
     try {
@@ -26,7 +26,7 @@ function BookOwner() {
         {
           onSuccess: (data) => {
             handleSetToken(data.token);
-            handleSetUser(data.user);
+            handleSetUser(data.user, data.userType as "admin" | "owner" | null);
           },
         }
       );

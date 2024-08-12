@@ -4,8 +4,10 @@ import {
   useMaterialReactTable,
   type MRT_ColumnDef,
 } from "material-react-table";
-import { booksListAdmin } from "@/_data/booksList";
 import { Paper, Switch, TableContainer } from "@mui/material";
+import { useGetBooksRentList } from "@/queries/queries";
+import MainFallback from "@/Fallbacks/MainFallback";
+import { useQueryClient } from "@tanstack/react-query";
 
 type Book = {
   author: string;
@@ -14,13 +16,31 @@ type Book = {
     name: string;
     imageUrl: string;
   };
-  category: string;
-  status: boolean;
+  category: number;
+  status: string;
 };
 
-const data: Book[] = booksListAdmin;
+// const data: Book[] = booksListAdmin;
 
 const BooksTable = () => {
+  const fetchBooks = useGetBooksRentList({ forAdmin: true });
+  // const categories = useQueryClient().getQueryData(["categories"]);
+  console.log("here");
+  // console.log(categories);
+
+  const data = fetchBooks.data?.map((bookItem) => {
+    return {
+      author: bookItem.bookInfo!.authorName,
+      bookName: bookItem.bookInfo!.name,
+      owner: {
+        name: bookItem.owner!.firstName + " " + bookItem.owner!.lastName,
+        imageUrl: "https://via.placeholder.com/180",
+      },
+      category: bookItem.bookInfo!.categoryId,
+      status: bookItem.status,
+    } as Book;
+  });
+
   const columns = useMemo<MRT_ColumnDef<Book>[]>(
     () => [
       {
@@ -65,14 +85,16 @@ const BooksTable = () => {
         Cell: ({ cell }) => (
           <span
             className={`grid grid-cols-2 text-end items-center w-36 px-3 py-1 rounded-2xl ${
-              cell.getValue()
-                ? "bg-green-200 text-green-800"
-                : "bg-red-200 text-red-800"
+              cell.getValue() === "unapproved"
+                ? "bg-red-200 text-red-800"
+                : "bg-green-200 text-green-800"
             }`}
           >
-            <span>{cell.getValue() ? "Active" : "Inactive"}</span>
+            <span>
+              {cell.getValue() === "unapproved" ? "InActive" : "Aactive"}
+            </span>
             <Switch
-              defaultChecked={cell.getValue<boolean>()}
+              defaultChecked={cell.getValue<string>() !== "unapproved"}
               color='success'
               size='small'
             />
@@ -87,7 +109,7 @@ const BooksTable = () => {
   const table = useMaterialReactTable({
     enableRowNumbers: true,
     columns,
-    data,
+    data: data || [],
   });
 
   return (
@@ -100,9 +122,13 @@ const BooksTable = () => {
         padding: "10px",
       }}
     >
-      <TableContainer component={Paper} elevation={0}>
-        <MaterialReactTable table={table} />
-      </TableContainer>
+      {fetchBooks.isPending ? (
+        <MainFallback />
+      ) : (
+        <TableContainer component={Paper} elevation={0}>
+          <MaterialReactTable table={table} />
+        </TableContainer>
+      )}
     </Paper>
   );
 };

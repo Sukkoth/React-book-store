@@ -1,17 +1,14 @@
 import { Owner } from "@/Types/GlobalTypes";
 import axios from "@/utils/axios";
 
-export const LOGIN_OWNER = async (
+export const LOGIN = async (
   credentials: LoginCredentials
-): Promise<LoginOwnerResponse> => {
-  const response = await axios.post<LoginOwnerResponse>(
-    "/auth/login",
-    credentials
-  );
+): Promise<LoginResponse> => {
+  const response = await axios.post<LoginResponse>("/auth/login", credentials);
   return response.data;
 };
 
-export interface LoginOwnerResponse {
+export interface LoginResponse {
   code: number;
   message: string;
   user: Owner;

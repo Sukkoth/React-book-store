@@ -28,7 +28,6 @@ export async function GET_CATEGORIES() {
 }
 
 export async function GET_BOOKS_LIST({ name }: { name?: string }) {
-  console.log("FORM SERVICE", { name });
   const res = await axios<BooksListResponse>(
     `/books?${name ? `name=${name}` : ""}`
   );

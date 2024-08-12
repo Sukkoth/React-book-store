@@ -10,6 +10,7 @@ import "./index.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "./Providers/AuthProvider.tsx";
 import { Toaster } from "react-hot-toast";
+import { AbilityProvider } from "./Providers/AbilityProvider.tsx";
 
 const theme = createTheme({
   palette: {
@@ -33,13 +34,15 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <BrowserRouter>
-          <ThemeProvider theme={theme}>
-            <App />
-            <Toaster />
-            <ReactQueryDevtools initialIsOpen={false} />
-          </ThemeProvider>
-        </BrowserRouter>
+        <AbilityProvider>
+          <BrowserRouter>
+            <ThemeProvider theme={theme}>
+              <App />
+              <Toaster />
+              <ReactQueryDevtools initialIsOpen={false} />
+            </ThemeProvider>
+          </BrowserRouter>
+        </AbilityProvider>
       </AuthProvider>
     </QueryClientProvider>
   </React.StrictMode>

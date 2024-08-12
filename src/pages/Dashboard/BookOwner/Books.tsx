@@ -40,8 +40,6 @@ function Books() {
   });
 
   async function submitForm(data: AddRentBookSchema) {
-    console.log("submit", data);
-
     await handleUploadBookRent.mutateAsync(data, {
       onSuccess: () => {
         setSuccessModal(true);

@@ -1,3 +1,5 @@
+import { Owner } from "./GlobalTypes";
+
 export interface CategoryStatsResponse {
   code: number | string;
   count: CategoryStatItem[];
@@ -36,6 +38,8 @@ export interface BookRent {
   status: string;
   createdAt: string;
   updatedAt: string;
+  bookInfo?: Book;
+  owner?: Owner;
 }
 
 export interface BooksListResponse {
@@ -52,4 +56,14 @@ export interface AddBookRentResponse {
   code: number;
   message: string;
   book: BookRent;
+}
+
+export interface GetBooksRentResponse {
+  code: number;
+  books: BookRent[];
+  count: number;
+  pagination: {
+    totalPages: number;
+    pageSize: number;
+  };
 }

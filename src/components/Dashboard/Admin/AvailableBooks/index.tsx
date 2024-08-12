@@ -3,7 +3,6 @@ import { PieChart } from "@mui/x-charts";
 import randomColor from "randomcolor";
 
 function AvailableBooks({ data }: { data?: CategoryStatItem[] }) {
-  console.log("DATA HERE", data);
   const seriesData = data
     ? data.map((dataItem) => {
         return {

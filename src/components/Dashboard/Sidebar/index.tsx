@@ -11,9 +11,10 @@ import SidebarHeader from "./SidebarHeader";
 import SidebarItem from "./SidebarItem";
 import SidebarLogoutButton from "./SidebarLogoutButton";
 import { useSidebar } from "./SidebarProvider";
+import { Can } from "@/Providers/AbilityProvider";
 
 function Sidebar() {
-  const { showIconsOnly, userType } = useSidebar();
+  const { showIconsOnly } = useSidebar();
   return (
     <div
       className={` bg-midnight-950 text-white rounded-md p-6 ${
@@ -22,10 +23,9 @@ function Sidebar() {
     >
       <SidebarHeader />
       {/* sidebar content */}
-
       <Box>
-        {[...(userType === "admin" ? adminItems : ownerItems)].map(
-          (menuList, index) => (
+        <Can I='view' a='admin-links'>
+          {adminItems.map((menuList, index) => (
             <SidebarGroup key={`menuList-${index}`}>
               {menuList.map((menuItem) => (
                 <SidebarItem
@@ -36,8 +36,22 @@ function Sidebar() {
                 />
               ))}
             </SidebarGroup>
-          )
-        )}
+          ))}
+        </Can>
+        <Can I='view' a='owner-links'>
+          {ownerItems.map((menuList, index) => (
+            <SidebarGroup key={`menuList-${index}`}>
+              {menuList.map((menuItem) => (
+                <SidebarItem
+                  key={menuItem.label}
+                  label={menuItem.label}
+                  href={menuItem.href}
+                  icon={menuItem.icon}
+                />
+              ))}
+            </SidebarGroup>
+          ))}
+        </Can>
       </Box>
 
       <SidebarLogoutButton />
