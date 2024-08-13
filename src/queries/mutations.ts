@@ -5,6 +5,7 @@ import {
   SIGNUP,
 } from "@/services/authService";
 import { ADD_BOOK, ADD_RENT_BOOK } from "@/services/ownerServices/booksService";
+import { APPROVE_RENT_BOOK, DELETE_RENT_BOOK } from "@/services/services";
 import { ServerFormErrorResponse } from "@/utils/parseServerFormError";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -38,5 +39,19 @@ export function useAddRentBook() {
   return useMutation({
     mutationFn: ADD_RENT_BOOK,
     mutationKey: ["addRentBook"],
+  });
+}
+
+export function useDeleteRentBook() {
+  return useMutation({
+    mutationFn: DELETE_RENT_BOOK,
+    mutationKey: ["deleteRentBook"],
+  });
+}
+
+export function useApproveRentBook() {
+  return useMutation({
+    mutationFn: APPROVE_RENT_BOOK,
+    mutationKey: ["updateRentBook"],
   });
 }

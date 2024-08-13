@@ -19,8 +19,11 @@ import { GetBooksRentResponse } from "@/Types/types";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import axios from "@/utils/axios";
 import { Refresh } from "@mui/icons-material";
+import { useApproveRentBook } from "@/queries/mutations";
+import toast from "react-hot-toast";
 
 type Book = {
+  id: number;
   author: string;
   bookName: string;
   owner: {
@@ -40,7 +43,9 @@ const BooksTable = () => {
     pageIndex: 0,
     pageSize: 10,
   });
+  const [dialogOpen, setDialogOpen] = useState<number | null>(null);
 
+  const handleApproveBook = useApproveRentBook();
   const { data, isError, isRefetching, isLoading, refetch, isPending } =
     useQuery<GetBooksRentResponse>({
       queryKey: [
@@ -97,6 +102,7 @@ const BooksTable = () => {
   const parsedData = data
     ? data?.books?.map((bookItem) => {
         return {
+          id: bookItem.id,
           author: bookItem.bookInfo!.authorName,
           bookName: bookItem.bookInfo!.name,
           owner: {
@@ -150,24 +156,49 @@ const BooksTable = () => {
       {
         accessorKey: "status",
         header: "Status",
-        Cell: ({ cell }) => (
-          <span
-            className={`grid grid-cols-2 text-end items-center w-36 px-3 py-1 rounded-2xl ${
-              cell.getValue() === "unapproved"
-                ? "bg-red-200 text-red-800"
-                : "bg-green-200 text-green-800"
-            }`}
-          >
-            <span>
-              {cell.getValue() === "unapproved" ? "InActive" : "Aactive"}
-            </span>
-            <Switch
-              defaultChecked={cell.getValue<string>() !== "unapproved"}
-              color='success'
-              size='small'
-            />
-          </span>
-        ),
+        Cell: ({ cell, row }) => {
+          const [approved, setApproved] = useState(
+            cell.getValue<string>() !== "unapproved"
+          );
+
+          return (
+            <div
+              className={`grid grid-cols-2 justify-start items-center w-36 px-3 py-1 rounded-2xl gap-5 ${
+                !approved
+                  ? "bg-red-200 text-red-800"
+                  : "bg-green-200 text-green-800"
+              }`}
+            >
+              <p className='flex flex-col mx-3'>
+                {approved ? "Approved" : "Inactive"}
+              </p>
+              <Switch
+                value={approved}
+                defaultChecked={approved}
+                onChange={() => {
+                  handleApproveBook.mutateAsync(
+                    {
+                      bookId: row.original!.id,
+                      status: approved ? "unapproved" : "free",
+                    },
+                    {
+                      onSuccess: () => {
+                        toast.success("Status Changed");
+                        setApproved((prev) => !prev);
+                        refetch();
+                      },
+                      onError: () => {
+                        toast.error("Could not change status");
+                      },
+                    }
+                  );
+                }}
+                color='success'
+                size='small'
+              />
+            </div>
+          );
+        },
         size: 100,
       },
     ],

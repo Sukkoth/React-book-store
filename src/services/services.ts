@@ -33,3 +33,21 @@ export async function GET_BOOKS_LIST({ name }: { name?: string }) {
   );
   return res.data;
 }
+
+//owners can delete books //atleast according to the UI
+export async function DELETE_RENT_BOOK({ bookId }: { bookId: number }) {
+  const res = await axios.delete(`/owners/books/${bookId}`);
+  return res.data;
+}
+
+//admin only approves books
+export async function APPROVE_RENT_BOOK({
+  bookId,
+  status,
+}: {
+  bookId: number;
+  status: "unapproved" | "free";
+}) {
+  const res = await axios.put(`/admins/books/${bookId}`, { status });
+  return res.data;
+}

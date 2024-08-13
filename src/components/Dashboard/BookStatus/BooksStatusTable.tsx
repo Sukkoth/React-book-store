@@ -1,10 +1,20 @@
-import { booksList } from "@/_data/booksList";
-import MainFallback from "@/Fallbacks/MainFallback";
 import { useAbility } from "@/Providers/AbilityProvider";
+import { useDeleteRentBook } from "@/queries/mutations";
 import { GetBooksRentResponse } from "@/Types/types";
 import axios from "@/utils/axios";
 import { Delete, Edit, Refresh } from "@mui/icons-material";
-import { Box, IconButton, Tooltip } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogProps,
+  DialogTitle,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import {
   MaterialReactTable,
@@ -15,6 +25,7 @@ import {
   type MRT_SortingState,
 } from "material-react-table";
 import { useMemo, useState } from "react";
+import toast from "react-hot-toast";
 
 type Book = {
   id: number;
@@ -38,7 +49,9 @@ const BooksStatusTable = () => {
     pageIndex: 0,
     pageSize: 10,
   });
+  const [dialogOpen, setDialogOpen] = useState<number | null>(null);
 
+  const handleDeleteBook = useDeleteRentBook();
   const { data, isError, isRefetching, isLoading, refetch } =
     useQuery<GetBooksRentResponse>({
       queryKey: [
@@ -220,13 +233,13 @@ const BooksStatusTable = () => {
     },
     enableRowActions: isEditor,
     positionActionsColumn: "last",
-    renderRowActions: () => {
+    renderRowActions: ({ row }) => {
       return (
         <Box sx={{ display: "flex" }}>
           <IconButton>
             <Edit color='action' />
           </IconButton>
-          <IconButton onClick={() => console.info("Delete")}>
+          <IconButton onClick={() => setDialogOpen(row.original.id)}>
             <Delete color='warning' />
           </IconButton>
         </Box>
@@ -236,6 +249,53 @@ const BooksStatusTable = () => {
 
   return (
     <div className='w-full grid overflow-auto'>
+      <Dialog
+        open={!!dialogOpen}
+        onClose={() => setDialogOpen(null)}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>Delete Book</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            <div className='w-[30rem]'>
+              {handleDeleteBook.isPending
+                ? "Deleting Book . . ."
+                : "Are you sure you want to delete this book?"}
+            </div>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            disabled={handleDeleteBook.isPending}
+            onClick={() => setDialogOpen(null)}
+          >
+            Cancel
+          </Button>
+          <Button
+            color='error'
+            disabled={handleDeleteBook.isPending}
+            onClick={() => {
+              handleDeleteBook.mutateAsync(
+                { bookId: dialogOpen! },
+                {
+                  onSuccess: () => {
+                    toast.success("Book Deleted");
+                    refetch();
+                    setDialogOpen(null);
+                  },
+                  onError: () => {
+                    toast.error("Could not delete book");
+                  },
+                }
+              );
+            }}
+            autoFocus
+          >
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
       <MaterialReactTable table={table} />
     </div>
   );
