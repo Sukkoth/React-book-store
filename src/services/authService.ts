@@ -1,4 +1,4 @@
-import { Owner, User } from "@/Types/GlobalTypes";
+import { Owner } from "@/Types/GlobalTypes";
 import axios from "@/utils/axios";
 
 export const LOGIN = async (

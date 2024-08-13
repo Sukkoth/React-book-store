@@ -10,7 +10,6 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogProps,
   DialogTitle,
   IconButton,
   Tooltip,

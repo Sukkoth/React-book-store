@@ -1,4 +1,15 @@
-import { useMemo, useState } from "react";
+import { useApproveRentBook } from "@/queries/mutations";
+import { GetBooksRentResponse } from "@/Types/types";
+import axios from "@/utils/axios";
+import { Refresh } from "@mui/icons-material";
+import {
+  IconButton,
+  Paper,
+  Switch,
+  TableContainer,
+  Tooltip,
+} from "@mui/material";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -7,19 +18,7 @@ import {
   type MRT_PaginationState,
   type MRT_SortingState,
 } from "material-react-table";
-import {
-  IconButton,
-  Paper,
-  Switch,
-  TableContainer,
-  Tooltip,
-} from "@mui/material";
-import MainFallback from "@/Fallbacks/MainFallback";
-import { GetBooksRentResponse } from "@/Types/types";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import axios from "@/utils/axios";
-import { Refresh } from "@mui/icons-material";
-import { useApproveRentBook } from "@/queries/mutations";
+import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 
 type Book = {

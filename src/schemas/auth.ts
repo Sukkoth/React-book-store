@@ -1,4 +1,4 @@
-import { boolean, z } from "zod";
+import { z } from "zod";
 
 export const loginValidation = z.object({
   email: z.string().min(6, "This field is required").email(),

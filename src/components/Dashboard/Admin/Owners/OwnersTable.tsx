@@ -1,4 +1,3 @@
-import { bookOwners } from "@/_data/booksList";
 import { Delete, Refresh, Visibility } from "@mui/icons-material";
 import {
   Box,
@@ -28,7 +27,6 @@ import ViewModal from "./ViewModal";
 import { GetOwnersResponse } from "@/Types/types";
 import axios from "@/utils/axios";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import MainFallback from "@/Fallbacks/MainFallback";
 import { Can } from "@/Providers/AbilityProvider";
 import { useApproveOwner, useDeleteOwner } from "@/queries/mutations";
 import toast from "react-hot-toast";
@@ -159,7 +157,7 @@ const OwnersTable = () => {
             </div>
           );
         },
-        Edit: ({ cell, column, row, table }) => {
+        Edit: ({ cell }) => {
           const cellData = cell.getValue<{
             name: string;
             imageUrl: string;

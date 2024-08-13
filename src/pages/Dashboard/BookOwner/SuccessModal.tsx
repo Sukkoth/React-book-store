@@ -1,7 +1,5 @@
 import { Box, Modal, Stack, Typography } from "@mui/material";
 
-import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
-
 type Props = {
   open: boolean;
   onClose: () => void;

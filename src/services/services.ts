@@ -1,5 +1,4 @@
 import {
-  Book,
   BooksListResponse,
   Category,
   CategoryStatsResponse,

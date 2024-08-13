@@ -1,8 +1,6 @@
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
-import SettingsIcon from "@mui/icons-material/Settings";
 import PersonIcon from "@mui/icons-material/Person";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Box } from "@mui/material";
 
