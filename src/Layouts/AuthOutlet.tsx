@@ -6,7 +6,7 @@ const AuthOutlet = () => {
   if (token !== null) {
     return <Outlet />;
   } else {
-    return <Navigate to='/auth/login/owner' replace />;
+    return <Navigate to='/auth/login' replace />;
   }
 };
 

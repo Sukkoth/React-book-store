@@ -9,40 +9,43 @@ import {
 } from "@mui/material";
 import { useAuth } from "@/Providers/AuthProvider";
 import { useLogin } from "@/queries/mutations";
-import { AxiosError } from "axios";
+import { LoginSchema, loginValidation } from "@/schemas/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import getErrorMessage from "@/utils/getErrorMessage";
 
 function Admin() {
   const navigate = useNavigate();
   const { handleSetToken, handleSetUser } = useAuth();
-  const login = useLogin();
+  const loginUser = useLogin();
 
-  async function handleLogin() {
-    try {
-      await login.mutateAsync(
-        {
-          email: "suukootj@gmail.com",
-          password: "password",
-          userType: "admin",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors: formErrors },
+  } = useForm<{
+    email: string;
+    password: string;
+    userType: "admin" | "owner";
+  }>({
+    resolver: zodResolver(loginValidation),
+  });
+
+  async function submitForm(data: LoginSchema) {
+    await loginUser.mutateAsync(
+      {
+        email: data.email,
+        password: data.password,
+        userType: "admin",
+      },
+      {
+        onSuccess: (data) => {
+          handleSetToken(data.token);
+          handleSetUser(data.user, data.userType as "admin" | "owner" | null);
+          navigate("/dashboard/admin"); //
         },
-        {
-          onSuccess: (data) => {
-            handleSetToken(data.token);
-            handleSetUser(data.user, data.userType as "admin" | "owner" | null);
-          },
-          onError: (error) => {
-            const errorData = error.response?.data as {
-              code: number;
-              message: string;
-            };
-            console.log("Error", errorData.message);
-          },
-        }
-      );
-
-      navigate("/dashboard/admin");
-    } catch (error) {
-      console.log(error);
-    }
+      }
+    );
   }
   return (
     <div className='h-full w-full flex flex-col items-center justify-center'>
@@ -52,21 +55,25 @@ function Admin() {
           Login as Admin
         </h1>
         <Typography color='red' fontSize={15} marginTop={1}>
-          {login.error?.response?.data?.message}
+          {loginUser.isError && getErrorMessage(loginUser.error)}
         </Typography>
-        <form className='mt-5 space-y-5'>
+        <form className='mt-5 space-y-5' onSubmit={handleSubmit(submitForm)}>
           <TextField
-            name='email'
             label='Email'
             variant='outlined'
             sx={{ width: "100%" }}
+            {...register("email")}
+            error={!!formErrors.email}
+            helperText={formErrors.email?.message}
           />
           <TextField
-            name='password'
             label='Password'
             variant='outlined'
             type='password'
             sx={{ width: "100%" }}
+            {...register("password")}
+            error={!!formErrors.password}
+            helperText={formErrors.password?.message}
           />
 
           <FormControlLabel
@@ -76,8 +83,8 @@ function Admin() {
 
           <div className='mt-10'>
             <Button
-              disabled={login.isPending}
-              onClick={handleLogin}
+              disabled={loginUser.isPending}
+              type='submit'
               color={"primary"}
               sx={{
                 width: "100%",
@@ -85,14 +92,20 @@ function Admin() {
               }}
               variant='contained'
             >
-              {login.isPending ? "Loging in . . . " : "Log in"}
+              {loginUser.isPending ? "Loging in . . . " : "Log in"}
             </Button>
           </div>
         </form>
 
         <div className='mt-5 text-center'>
           <p className='text-lg'>
-            Don't have an account? <Link to={"/auth/signup"}>Signup</Link>
+            Don't have an account?{" "}
+            <Link
+              className='text-picton-400 underline font-medium ps-1'
+              to={"/auth/signup"}
+            >
+              Signup
+            </Link>
           </p>
         </div>
       </div>

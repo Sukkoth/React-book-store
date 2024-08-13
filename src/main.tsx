@@ -33,17 +33,17 @@ const queryClient = new QueryClient({
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <AbilityProvider>
-          <BrowserRouter>
+      <BrowserRouter>
+        <AuthProvider>
+          <AbilityProvider>
             <ThemeProvider theme={theme}>
               <App />
               <Toaster />
               <ReactQueryDevtools initialIsOpen={false} />
             </ThemeProvider>
-          </BrowserRouter>
-        </AbilityProvider>
-      </AuthProvider>
+          </AbilityProvider>
+        </AuthProvider>
+      </BrowserRouter>
     </QueryClientProvider>
   </React.StrictMode>
 );

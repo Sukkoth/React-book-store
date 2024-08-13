@@ -1,11 +1,4 @@
-import { lazy } from "react";
-import withSuspense from "@/withSuspense";
-
-//*Wrap components with lazy loading
-const Home = withSuspense(
-  lazy(() => import("@/pages/Home")),
-  "main"
-);
+import Home from "@/pages/Home";
 
 const HomeRoutes = {
   index: Home,

@@ -1,16 +1,29 @@
-import { LOGIN, LoginCredentials, LoginResponse } from "@/services/authService";
+import {
+  LOGIN,
+  LoginCredentials,
+  LoginResponse,
+  SIGNUP,
+} from "@/services/authService";
 import { ADD_BOOK, ADD_RENT_BOOK } from "@/services/ownerServices/booksService";
+import { ServerFormErrorResponse } from "@/utils/parseServerFormError";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
 export function useLogin() {
-  return useMutation<
-    LoginResponse,
-    AxiosError<{ code?: number; message?: string }>,
-    LoginCredentials
-  >({
+  return useMutation<LoginResponse, AxiosError, LoginCredentials>({
     mutationFn: LOGIN,
     mutationKey: ["login"],
+  });
+}
+
+export function useSignup() {
+  return useMutation<
+    LoginResponse,
+    AxiosError<ServerFormErrorResponse>,
+    LoginCredentials
+  >({
+    mutationFn: SIGNUP,
+    mutationKey: ["signup"],
   });
 }
 
