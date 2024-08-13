@@ -1,5 +1,13 @@
+import Nav from "@/components/UIChallenge/Nav";
+import "../../index.css";
+import "../../ui-challenge-styles.css";
+
 function Details() {
-  return <div>Details</div>;
+  return (
+    <main className='text-sm ui-font'>
+      <Nav />
+    </main>
+  );
 }
 
 export default Details;

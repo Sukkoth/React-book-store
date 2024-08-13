@@ -6,6 +6,7 @@ import {
   Star,
   StarsRounded,
 } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   title: string;
@@ -24,8 +25,12 @@ function Item({
   shopName,
   images,
 }: Props) {
+  const navigate = useNavigate();
   return (
-    <div className='w-full group'>
+    <div
+      className='w-full group cursor-pointer'
+      onClick={() => navigate("/ui/details")}
+    >
       {/* image */}
       <div className='w-full aspect-square relative'>
         <img
