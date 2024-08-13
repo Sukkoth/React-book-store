@@ -12,6 +12,7 @@ import DashboardLayout from "@/Layouts/DashboardLayout";
 import AuthOutlet from "@/Layouts/AuthOutlet";
 import CASLOutlet from "@/Layouts/CASLOutlet";
 import { useGetCategories } from "@/queries/queries";
+import LoginOutlet from "./Layouts/LoginOutlet";
 
 function App() {
   useGetCategories();
@@ -20,7 +21,7 @@ function App() {
       <Route index element={<AppRoutes.home.index />} />
       <Route path='/auth' element={<AuthLayout />}>
         <Route path='signup' element={<AppRoutes.auth.signup />} />
-        <Route path='login'>
+        <Route path='login' element={<LoginOutlet />}>
           <Route index element={<AppRoutes.auth.login.index />} />
           <Route path='admin' element={<AppRoutes.auth.login.admin />} />
           <Route path='owner' element={<AppRoutes.auth.login.owner />} />

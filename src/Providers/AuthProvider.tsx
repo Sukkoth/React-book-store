@@ -1,5 +1,6 @@
 import { Admin, Owner } from "@/Types/GlobalTypes";
 import { createContext, useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 // Define the type for auth context
 interface AuthContextType {
@@ -8,6 +9,7 @@ interface AuthContextType {
   token: string | null;
   handleSetToken: (userToken: string | null) => void;
   handleSetUser: (user: Admin | Owner, type: "admin" | "owner" | null) => void;
+  handleLogout: (redirectTo?: string | null) => void;
 }
 
 // Create a default value for the context
@@ -20,7 +22,16 @@ interface AuthProviderProps {
 
 // Create the AuthProvider component
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<Admin | Owner | null>(null);
+  const navigate = useNavigate();
+  const [user, setUser] = useState<Admin | Owner | null>(() => {
+    const userInLocal = localStorage.getItem("user");
+    const parsedUser = userInLocal ? JSON.parse(userInLocal) : null;
+    if (parsedUser === null) {
+      return null;
+    }
+    const { userType: localUserType, ...finalData } = parsedUser;
+    return finalData;
+  });
   const [token, setToken] = useState<string | null>(() => {
     const tokenInLocal = localStorage.getItem("token");
     return tokenInLocal ? tokenInLocal : null;
@@ -54,6 +65,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       : localStorage.setItem("token", userToken);
   }
 
+  function handleLogout(redirectTo: string | null = null) {
+    setUser(null);
+    setToken(null);
+    setUserType(null);
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+
+    if (redirectTo) {
+      return navigate(redirectTo);
+    }
+    return navigate("/");
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -62,6 +86,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         handleSetToken,
         token,
         userType,
+        handleLogout,
       }}
     >
       {children}

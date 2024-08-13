@@ -7,7 +7,6 @@ import {
 import { Paper, Switch, TableContainer } from "@mui/material";
 import { useGetBooksRentList } from "@/queries/queries";
 import MainFallback from "@/Fallbacks/MainFallback";
-import { useQueryClient } from "@tanstack/react-query";
 
 type Book = {
   author: string;
@@ -19,14 +18,10 @@ type Book = {
   category: number;
   status: string;
 };
-
-// const data: Book[] = booksListAdmin;
+;
 
 const BooksTable = () => {
   const fetchBooks = useGetBooksRentList({ forAdmin: true });
-  // const categories = useQueryClient().getQueryData(["categories"]);
-  console.log("here");
-  // console.log(categories);
 
   const data = fetchBooks.data?.map((bookItem) => {
     return {

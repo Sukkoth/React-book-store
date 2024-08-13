@@ -66,9 +66,7 @@ export default function AsyncAutocomplete({
         onInputChange={(_event, value) => fetchOptions(value)}
         onFocus={() => options.length === 0 && fetchOptions("")}
         onChange={(_event, value) => {
-          if (value && "customButton" in value) {
-            handleButtonClick();
-          } else {
+          if (!(value && "customButton" in value)) {
             setSelectedOption(value as Book | null);
             if (value?.id) {
               handleBookIdSelection(value.id);
@@ -78,11 +76,15 @@ export default function AsyncAutocomplete({
         getOptionLabel={(option) => ("name" in option ? option.name : "")}
         options={displayedOptions}
         loading={loading}
+        isOptionEqualToValue={(option, value) =>
+          (option as Book).id === (value as Book).id
+        }
         renderOption={(props, option) =>
           "customButton" in option ? (
-            <>
+            <Box key={props.key}>
               <Divider key={"divider"} />
               <Button
+                onClick={handleButtonClick}
                 key={"custom-btn"}
                 variant='contained'
                 fullWidth
@@ -93,10 +95,10 @@ export default function AsyncAutocomplete({
               >
                 Add Book
               </Button>
-            </>
+            </Box>
           ) : (
-            <Box component='li' {...props}>
-              {(option as Book).name}
+            <Box component='li' {...props} key={option.id}>
+              {(option as Book).name + " by " + option.authorName}
             </Box>
           )
         }
