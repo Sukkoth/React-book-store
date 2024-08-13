@@ -42,7 +42,7 @@ const BooksStatusTable = () => {
   const { data, isError, isRefetching, isLoading, refetch } =
     useQuery<GetBooksRentResponse>({
       queryKey: [
-        "table-data",
+        "live-book-status",
         columnFilters, //refetch when columnFilters changes
         globalFilter, //refetch when globalFilter changes
         pagination.pageIndex, //refetch when pagination.pageIndex changes
@@ -114,7 +114,7 @@ const BooksStatusTable = () => {
         };
         return b;
       })
-    : booksList;
+    : [];
 
   const columns = useMemo<MRT_ColumnDef<Book>[]>(
     () => [
@@ -236,7 +236,7 @@ const BooksStatusTable = () => {
 
   return (
     <div className='w-full grid overflow-auto'>
-      {isLoading ? <MainFallback /> : <MaterialReactTable table={table} />}
+      <MaterialReactTable table={table} />
     </div>
   );
 };

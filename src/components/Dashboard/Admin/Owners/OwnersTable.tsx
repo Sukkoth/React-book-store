@@ -1,5 +1,5 @@
 import { bookOwners } from "@/_data/booksList";
-import { Delete, Visibility } from "@mui/icons-material";
+import { Delete, Refresh, Visibility } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -8,14 +8,22 @@ import {
   Paper,
   Switch,
   TableContainer,
+  Tooltip,
 } from "@mui/material";
 import {
   MaterialReactTable,
   useMaterialReactTable,
   type MRT_ColumnDef,
+  type MRT_ColumnFiltersState,
+  type MRT_PaginationState,
+  type MRT_SortingState,
 } from "material-react-table";
 import { useMemo, useState } from "react";
 import ViewModal from "./ViewModal";
+import { GetOwnersResponse } from "@/Types/types";
+import axios from "@/utils/axios";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import MainFallback from "@/Fallbacks/MainFallback";
 
 export type BookOwner = {
   id: number;
@@ -34,9 +42,88 @@ export type BookOwner = {
 const data: BookOwner[] = bookOwners;
 
 const OwnersTable = () => {
+  const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(
+    []
+  );
+  const [globalFilter, setGlobalFilter] = useState("");
+  const [sorting, setSorting] = useState<MRT_SortingState>([]);
+  const [pagination, setPagination] = useState<MRT_PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+
   const [viewOwnerData, setViewOwnerData] = useState<null | BookOwner>(null);
   const handleSetViewOwnerData = (owner: BookOwner) => setViewOwnerData(owner);
   const handleCloseModal = () => setViewOwnerData(null);
+
+  const { data, isError, isRefetching, isLoading, refetch } =
+    useQuery<GetOwnersResponse>({
+      queryKey: [
+        "admin-owners-list",
+        columnFilters, //refetch when columnFilters changes
+        globalFilter, //refetch when globalFilter changes
+        pagination.pageIndex, //refetch when pagination.pageIndex changes
+        pagination.pageSize, //refetch when pagination.pageSize changes
+        sorting, //refetch when sorting changes
+      ],
+      queryFn: async () => {
+        const params: {
+          pageSize?: string;
+          bookNo?: string;
+          status?: string;
+          uploads?: string;
+          location?: string;
+        } = {};
+
+        columnFilters.forEach((col) => {
+          params[col.id as keyof typeof params] = col.value as string;
+        });
+
+        const json = await axios.get<GetOwnersResponse>(`/admins/owners`, {
+          params: {
+            ...params,
+            pageSize: pagination.pageSize,
+            page: pagination.pageIndex + 1,
+            // uploads: {
+            //   equals: params.uploads || undefined,
+            // },
+            location: params.location,
+            status: params.status,
+            sortField: sorting.length
+              ? sorting[0].id === "owner"
+                ? "name"
+                : sorting[0].id
+              : undefined,
+            sortOrder: sorting.length
+              ? sorting[0].desc
+                ? "desc"
+                : "asc"
+              : undefined,
+          },
+        });
+        return json.data;
+      },
+      placeholderData: keepPreviousData,
+    });
+
+  const parsedData = data
+    ? data.owners.map((owner) => {
+        const b: BookOwner = {
+          id: owner.id,
+          owner: {
+            name: owner.firstName + " " + owner.lastName,
+            imageUrl: "https://via.placeholder.com/180",
+            approved: owner.approved,
+            email: owner.email,
+            phone: owner.phone,
+          },
+          upload: owner._count!.books,
+          status: owner.status === "free" ? true : false,
+          location: owner.location,
+        };
+        return b;
+      })
+    : [];
 
   const columns = useMemo<MRT_ColumnDef<BookOwner>[]>(
     () => [
@@ -109,9 +196,40 @@ const OwnersTable = () => {
   );
 
   const table = useMaterialReactTable({
-    enableRowNumbers: true,
     columns,
-    data,
+    data: parsedData,
+    initialState: { showColumnFilters: true },
+    manualFiltering: true,
+    manualPagination: true,
+    rowCount: data?.pagination.totalCount as number,
+    manualSorting: true,
+    muiToolbarAlertBannerProps: isError
+      ? {
+          color: "error",
+          children: "Error loading data",
+        }
+      : undefined,
+    onColumnFiltersChange: setColumnFilters,
+    onGlobalFilterChange: setGlobalFilter,
+    onPaginationChange: setPagination,
+    onSortingChange: setSorting,
+    renderTopToolbarCustomActions: () => (
+      <Tooltip arrow title='Refresh Data'>
+        <IconButton onClick={() => refetch()}>
+          <Refresh />
+        </IconButton>
+      </Tooltip>
+    ),
+    pageCount: data?.pagination.totalPages,
+    state: {
+      columnFilters,
+      globalFilter,
+      isLoading,
+      pagination,
+      showAlertBanner: isError,
+      showProgressBars: isRefetching,
+      sorting,
+    },
     enableRowActions: true,
     positionActionsColumn: "last",
     renderRowActions: ({ cell, row }) => {

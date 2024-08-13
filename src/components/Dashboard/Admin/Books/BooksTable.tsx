@@ -1,12 +1,24 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
   type MRT_ColumnDef,
+  type MRT_ColumnFiltersState,
+  type MRT_PaginationState,
+  type MRT_SortingState,
 } from "material-react-table";
-import { Paper, Switch, TableContainer } from "@mui/material";
-import { useGetBooksRentList } from "@/queries/queries";
+import {
+  IconButton,
+  Paper,
+  Switch,
+  TableContainer,
+  Tooltip,
+} from "@mui/material";
 import MainFallback from "@/Fallbacks/MainFallback";
+import { GetBooksRentResponse } from "@/Types/types";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import axios from "@/utils/axios";
+import { Refresh } from "@mui/icons-material";
 
 type Book = {
   author: string;
@@ -15,26 +27,87 @@ type Book = {
     name: string;
     imageUrl: string;
   };
-  category: number;
+  category: string;
   status: string;
 };
-;
-
 const BooksTable = () => {
-  const fetchBooks = useGetBooksRentList({ forAdmin: true });
-
-  const data = fetchBooks.data?.map((bookItem) => {
-    return {
-      author: bookItem.bookInfo!.authorName,
-      bookName: bookItem.bookInfo!.name,
-      owner: {
-        name: bookItem.owner!.firstName + " " + bookItem.owner!.lastName,
-        imageUrl: "https://via.placeholder.com/180",
-      },
-      category: bookItem.bookInfo!.categoryId,
-      status: bookItem.status,
-    } as Book;
+  const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(
+    []
+  );
+  const [globalFilter, setGlobalFilter] = useState("");
+  const [sorting, setSorting] = useState<MRT_SortingState>([]);
+  const [pagination, setPagination] = useState<MRT_PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
   });
+
+  const { data, isError, isRefetching, isLoading, refetch, isPending } =
+    useQuery<GetBooksRentResponse>({
+      queryKey: [
+        "admin-books-table",
+        columnFilters, //refetch when columnFilters changes
+        globalFilter, //refetch when globalFilter changes
+        pagination.pageIndex, //refetch when pagination.pageIndex changes
+        pagination.pageSize, //refetch when pagination.pageSize changes
+        sorting, //refetch when sorting changes
+      ],
+      queryFn: async () => {
+        const params: {
+          pageSize?: string;
+          bookNo?: string;
+          status?: string;
+          price?: string;
+          bookName?: string;
+        } = {};
+
+        columnFilters.forEach((col) => {
+          params[col.id as keyof typeof params] = col.value as string;
+        });
+
+        const json = await axios.get<GetBooksRentResponse>(`/admins/books`, {
+          params: {
+            ...params,
+            pageSize: pagination.pageSize,
+            page: pagination.pageIndex + 1,
+            price: {
+              equals: params.price || undefined,
+            },
+            bookNo: {
+              equals: params.bookNo || undefined,
+            },
+            sortField: sorting.length
+              ? sorting[0].id === "name"
+                ? "bookName"
+                : sorting[0].id
+              : undefined,
+            sortOrder: sorting.length
+              ? sorting[0].desc
+                ? "desc"
+                : "asc"
+              : undefined,
+          },
+        });
+        return json.data;
+      },
+      placeholderData: keepPreviousData,
+    });
+
+  // const fetchBooks = useGetBooksRentList({ forAdmin: true });
+
+  const parsedData = data
+    ? data?.books?.map((bookItem) => {
+        return {
+          author: bookItem.bookInfo!.authorName,
+          bookName: bookItem.bookInfo!.name,
+          owner: {
+            name: bookItem.owner!.firstName + " " + bookItem.owner!.lastName,
+            imageUrl: `https://via.placeholder.com/${bookItem.owner?.id}`,
+          },
+          category: bookItem.bookInfo!.category!.name,
+          status: bookItem.status,
+        } as Book;
+      })
+    : [];
 
   const columns = useMemo<MRT_ColumnDef<Book>[]>(
     () => [
@@ -102,9 +175,40 @@ const BooksTable = () => {
   );
 
   const table = useMaterialReactTable({
-    enableRowNumbers: true,
     columns,
-    data: data || [],
+    data: parsedData,
+    initialState: { showColumnFilters: true },
+    manualFiltering: true,
+    manualPagination: true,
+    rowCount: data?.pagination.totalCount as number,
+    manualSorting: true,
+    muiToolbarAlertBannerProps: isError
+      ? {
+          color: "error",
+          children: "Error loading data",
+        }
+      : undefined,
+    onColumnFiltersChange: setColumnFilters,
+    onGlobalFilterChange: setGlobalFilter,
+    onPaginationChange: setPagination,
+    onSortingChange: setSorting,
+    renderTopToolbarCustomActions: () => (
+      <Tooltip arrow title='Refresh Data'>
+        <IconButton onClick={() => refetch()}>
+          <Refresh />
+        </IconButton>
+      </Tooltip>
+    ),
+    pageCount: data?.pagination.totalPages,
+    state: {
+      columnFilters,
+      globalFilter,
+      isLoading,
+      pagination,
+      showAlertBanner: isError,
+      showProgressBars: isRefetching,
+      sorting,
+    },
   });
 
   return (
@@ -117,13 +221,9 @@ const BooksTable = () => {
         padding: "10px",
       }}
     >
-      {fetchBooks.isPending ? (
-        <MainFallback />
-      ) : (
-        <TableContainer component={Paper} elevation={0}>
-          <MaterialReactTable table={table} />
-        </TableContainer>
-      )}
+      <TableContainer component={Paper} elevation={0}>
+        <MaterialReactTable table={table} />
+      </TableContainer>
     </Paper>
   );
 };
