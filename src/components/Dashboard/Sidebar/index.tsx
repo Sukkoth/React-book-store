@@ -14,10 +14,18 @@ import { useSidebar } from "./SidebarProvider";
 import { Can } from "@/Providers/AbilityProvider";
 import { useAuth } from "@/Providers/AuthProvider";
 
+type LinksType = {
+  label: string;
+  icon?: React.ReactNode;
+  href?: string;
+  onClick?: () => void;
+};
+
 function Sidebar() {
   const { showIconsOnly } = useSidebar();
   const { handleLogout } = useAuth();
-  const adminItems = [
+
+  const adminItems: Array<LinksType[]> = [
     [
       {
         label: "Dashboard",
@@ -37,26 +45,16 @@ function Sidebar() {
     ],
     [
       {
-        label: "Notifications",
-        icon: <NotificationsIcon />,
-        href: "/dashboard/admin/notifications",
-      },
-      {
-        label: "Settings",
-        icon: <SettingsIcon />,
-        href: "/dashboard/admin/settings",
-      },
-      {
         label: "Login as Book Owner",
         icon: <AccountCircleIcon />,
-        onclick: () => {
+        onClick: () => {
           handleLogout("/auth/login/owner");
         },
       },
     ],
   ];
 
-  const ownerItems = [
+  const ownerItems: Array<LinksType[]> = [
     [
       {
         label: "Dashboard",
@@ -71,19 +69,9 @@ function Sidebar() {
     ],
     [
       {
-        label: "Notifications",
-        icon: <NotificationsIcon />,
-        href: "/dashboard/owner/notifications",
-      },
-      {
-        label: "Settings",
-        icon: <SettingsIcon />,
-        href: "/dashboard/owner/settings",
-      },
-      {
         label: "Login as Admin",
         icon: <AccountCircleIcon />,
-        onclick: () => {
+        onClick: () => {
           handleLogout("/auth/login/admin");
         },
       },
@@ -105,9 +93,9 @@ function Sidebar() {
                 <SidebarItem
                   key={menuItem.label}
                   label={menuItem.label}
-                  href={menuItem.href}
+                  href={menuItem?.href || undefined}
                   icon={menuItem.icon}
-                  onClick={menuItem.onclick}
+                  onClick={menuItem.onClick}
                 />
               ))}
             </SidebarGroup>
@@ -122,7 +110,7 @@ function Sidebar() {
                   label={menuItem.label}
                   href={menuItem.href}
                   icon={menuItem.icon}
-                  onClick={menuItem.onclick}
+                  onClick={menuItem.onClick}
                 />
               ))}
             </SidebarGroup>

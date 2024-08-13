@@ -7,7 +7,8 @@ type Subjects =
   | "books"
   | "admin-links"
   | "owner-links"
-  | "all";
+  | "all"
+  | "owner";
 
 export type AppAbility = Ability<[Actions, Subjects]>;
 
@@ -21,6 +22,7 @@ export default function defineAbility(userType: UserType): AppAbility {
   if (userType === "admin") {
     can("view", "admin-dashboard");
     can("approve", "books");
+    can("delete", "owner");
     can("view", "admin-links"); // On sidebar
   } else if (userType === "owner") {
     can("view", "owner-dashboard");

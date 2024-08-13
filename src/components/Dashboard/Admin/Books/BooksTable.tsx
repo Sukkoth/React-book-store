@@ -32,6 +32,7 @@ type Book = {
   };
   category: string;
   status: string;
+  approved: boolean;
 };
 const BooksTable = () => {
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(
@@ -43,10 +44,9 @@ const BooksTable = () => {
     pageIndex: 0,
     pageSize: 10,
   });
-  const [dialogOpen, setDialogOpen] = useState<number | null>(null);
 
   const handleApproveBook = useApproveRentBook();
-  const { data, isError, isRefetching, isLoading, refetch, isPending } =
+  const { data, isError, isRefetching, isLoading, refetch } =
     useQuery<GetBooksRentResponse>({
       queryKey: [
         "admin-books-table",
@@ -111,6 +111,7 @@ const BooksTable = () => {
           },
           category: bookItem.bookInfo!.category!.name,
           status: bookItem.status,
+          approved: bookItem.approved,
         } as Book;
       })
     : [];
@@ -154,12 +155,11 @@ const BooksTable = () => {
         size: 100,
       },
       {
-        accessorKey: "status",
-        header: "Status",
+        accessorKey: "approved",
+        header: "Approved",
         Cell: ({ cell, row }) => {
-          const [approved, setApproved] = useState(
-            cell.getValue<string>() !== "unapproved"
-          );
+          const approved = cell.getValue<boolean>();
+          console.log("APPROVED", approved);
 
           return (
             <div
@@ -170,25 +170,24 @@ const BooksTable = () => {
               }`}
             >
               <p className='flex flex-col mx-3'>
-                {approved ? "Approved" : "Inactive"}
+                {approved ? "Active" : "Inactive"}
               </p>
               <Switch
-                value={approved}
                 defaultChecked={approved}
                 onChange={() => {
                   handleApproveBook.mutateAsync(
                     {
                       bookId: row.original!.id,
-                      status: approved ? "unapproved" : "free",
+                      approved: approved ? "false" : "true",
                     },
                     {
                       onSuccess: () => {
-                        toast.success("Status Changed");
-                        setApproved((prev) => !prev);
+                        toast.success("Approved Status Changed");
+
                         refetch();
                       },
                       onError: () => {
-                        toast.error("Could not change status");
+                        toast.error("Could not change approved status");
                       },
                     }
                   );

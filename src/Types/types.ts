@@ -37,6 +37,7 @@ export interface BookRent {
   bookId: number;
   ownerId: number;
   status: string;
+  approved: boolean;
   createdAt: string;
   updatedAt: string;
   bookInfo?: Book;

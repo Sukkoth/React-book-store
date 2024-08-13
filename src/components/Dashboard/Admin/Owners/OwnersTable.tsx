@@ -3,6 +3,11 @@ import { Delete, Refresh, Visibility } from "@mui/icons-material";
 import {
   Box,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   IconButton,
   Input,
   Paper,
@@ -24,6 +29,9 @@ import { GetOwnersResponse } from "@/Types/types";
 import axios from "@/utils/axios";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import MainFallback from "@/Fallbacks/MainFallback";
+import { Can } from "@/Providers/AbilityProvider";
+import { useApproveOwner, useDeleteOwner } from "@/queries/mutations";
+import toast from "react-hot-toast";
 
 export type BookOwner = {
   id: number;
@@ -39,8 +47,6 @@ export type BookOwner = {
   status: boolean;
 };
 
-const data: BookOwner[] = bookOwners;
-
 const OwnersTable = () => {
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(
     []
@@ -51,10 +57,14 @@ const OwnersTable = () => {
     pageIndex: 0,
     pageSize: 10,
   });
+  const [dialogOpen, setDialogOpen] = useState<number | null>(null);
 
   const [viewOwnerData, setViewOwnerData] = useState<null | BookOwner>(null);
   const handleSetViewOwnerData = (owner: BookOwner) => setViewOwnerData(owner);
   const handleCloseModal = () => setViewOwnerData(null);
+
+  const handleDeleteBook = useDeleteOwner();
+  const handleApproveOwner = useApproveOwner();
 
   const { data, isError, isRefetching, isLoading, refetch } =
     useQuery<GetOwnersResponse>({
@@ -118,7 +128,7 @@ const OwnersTable = () => {
             phone: owner.phone,
           },
           upload: owner._count!.books,
-          status: owner.status === "free" ? true : false,
+          status: owner.status === "active" ? true : false,
           location: owner.location,
         };
         return b;
@@ -173,22 +183,41 @@ const OwnersTable = () => {
       {
         accessorKey: "status",
         header: "Status",
-        Cell: ({ cell }) => (
-          <span
-            className={`grid grid-cols-2 text-end items-center w-36 px-3 py-1 rounded-2xl ${
-              cell.getValue()
-                ? "bg-green-200 text-green-800"
-                : "bg-red-200 text-red-800"
-            }`}
-          >
-            <span>{cell.getValue() ? "Active" : "Inactive"}</span>
-            <Switch
-              defaultChecked={cell.getValue<boolean>()}
-              color='success'
-              size='small'
-            />
-          </span>
-        ),
+        Cell: ({ cell, row }) => {
+          return (
+            <span
+              className={`grid grid-cols-2 text-end items-center w-36 px-3 py-1 rounded-2xl ${
+                cell.getValue()
+                  ? "bg-green-200 text-green-800"
+                  : "bg-red-200 text-red-800"
+              }`}
+            >
+              <span>{cell.getValue() ? "Active" : "Inactive"}</span>
+              <Switch
+                defaultChecked={cell.getValue<boolean>()}
+                color='success'
+                size='small'
+                onChange={() => {
+                  handleApproveOwner.mutateAsync(
+                    {
+                      ownerId: row.original.id,
+                      status: cell.getValue() ? "inactive" : "active",
+                    },
+                    {
+                      onSuccess: () => {
+                        toast.success("Owner approved");
+                        refetch();
+                      },
+                      onError: () => {
+                        toast.error("Could not approve owner");
+                      },
+                    }
+                  );
+                }}
+              />
+            </span>
+          );
+        },
         size: 100,
       },
     ],
@@ -245,12 +274,33 @@ const OwnersTable = () => {
           >
             <Visibility color='action' />
           </IconButton>
-          <IconButton onClick={() => console.info("Delete")}>
-            <Delete color='warning' />
-          </IconButton>
+          <Can I='delete' an='owner'>
+            <IconButton onClick={() => setDialogOpen(bookOwner.id)}>
+              <Delete color='warning' />
+            </IconButton>
+          </Can>
           <Button
             disableElevation
             variant='contained'
+            onClick={() => {
+              handleApproveOwner.mutateAsync(
+                {
+                  ownerId: bookOwner.id,
+                  approved: row.getValue<ownerType>("owner").approved
+                    ? "false"
+                    : "true",
+                },
+                {
+                  onSuccess: () => {
+                    toast.success("Owner approved");
+                    refetch();
+                  },
+                  onError: () => {
+                    toast.error("Could not approve owner");
+                  },
+                }
+              );
+            }}
             color={
               row.getValue<ownerType>("owner").approved ? "primary" : "inherit"
             }
@@ -283,6 +333,56 @@ const OwnersTable = () => {
             bookOwner={viewOwnerData!}
           />
         )}
+
+        {/* Dialog to delete */}
+
+        <Dialog
+          open={!!dialogOpen}
+          onClose={() => setDialogOpen(null)}
+          aria-labelledby='alert-dialog-title'
+          aria-describedby='alert-dialog-description'
+        >
+          <DialogTitle id='alert-dialog-title'>Delete Book</DialogTitle>
+          <DialogContent>
+            <DialogContentText id='alert-dialog-description'>
+              <div className='w-[30rem]'>
+                {handleDeleteBook.isPending
+                  ? "Deleting Book Owner . . ."
+                  : "Are you sure you want to delete this book owner?"}
+              </div>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              disabled={handleDeleteBook.isPending}
+              onClick={() => setDialogOpen(null)}
+            >
+              Cancel
+            </Button>
+            <Button
+              color='error'
+              disabled={handleDeleteBook.isPending}
+              onClick={() => {
+                handleDeleteBook.mutateAsync(
+                  { ownerId: dialogOpen! },
+                  {
+                    onSuccess: () => {
+                      toast.success("Owner Deleted");
+                      refetch();
+                      setDialogOpen(null);
+                    },
+                    onError: () => {
+                      toast.error("Could not delete owner");
+                    },
+                  }
+                );
+              }}
+              autoFocus
+            >
+              Agree
+            </Button>
+          </DialogActions>
+        </Dialog>
         {/* view all info in table */}
         <MaterialReactTable table={table} />
       </TableContainer>

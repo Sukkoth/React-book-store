@@ -40,14 +40,37 @@ export async function DELETE_RENT_BOOK({ bookId }: { bookId: number }) {
   return res.data;
 }
 
+//admins can delete owners
+export async function DELETE_OWNER({ ownerId }: { ownerId: number }) {
+  const res = await axios.delete(`/admins/owners/${ownerId}`);
+  return res.data;
+}
+
 //admin only approves books
 export async function APPROVE_RENT_BOOK({
   bookId,
-  status,
+  approved,
 }: {
   bookId: number;
-  status: "unapproved" | "free";
+  approved: "true" | "false";
 }) {
-  const res = await axios.put(`/admins/books/${bookId}`, { status });
+  const res = await axios.put(`/admins/books/${bookId}`, { approved });
+  return res.data;
+}
+
+//admin approves owners
+export async function APPROVE_OWNER({
+  ownerId,
+  approved,
+  status,
+}: {
+  ownerId: number;
+  approved?: "true" | "false";
+  status?: "active" | "inactive";
+}) {
+  const res = await axios.put(`/admins/owners/${ownerId}`, {
+    approved,
+    status,
+  });
   return res.data;
 }

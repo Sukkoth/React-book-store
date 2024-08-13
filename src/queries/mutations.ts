@@ -5,7 +5,12 @@ import {
   SIGNUP,
 } from "@/services/authService";
 import { ADD_BOOK, ADD_RENT_BOOK } from "@/services/ownerServices/booksService";
-import { APPROVE_RENT_BOOK, DELETE_RENT_BOOK } from "@/services/services";
+import {
+  APPROVE_OWNER,
+  APPROVE_RENT_BOOK,
+  DELETE_OWNER,
+  DELETE_RENT_BOOK,
+} from "@/services/services";
 import { ServerFormErrorResponse } from "@/utils/parseServerFormError";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -49,9 +54,23 @@ export function useDeleteRentBook() {
   });
 }
 
+export function useDeleteOwner() {
+  return useMutation({
+    mutationFn: DELETE_OWNER,
+    mutationKey: ["deleteOwner"],
+  });
+}
+
 export function useApproveRentBook() {
   return useMutation({
     mutationFn: APPROVE_RENT_BOOK,
     mutationKey: ["updateRentBook"],
+  });
+}
+
+export function useApproveOwner() {
+  return useMutation({
+    mutationFn: APPROVE_OWNER,
+    mutationKey: ["approveOwner"],
   });
 }

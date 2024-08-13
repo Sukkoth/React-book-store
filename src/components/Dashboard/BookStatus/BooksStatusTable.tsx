@@ -1,4 +1,4 @@
-import { useAbility } from "@/Providers/AbilityProvider";
+import { Can, useAbility } from "@/Providers/AbilityProvider";
 import { useDeleteRentBook } from "@/queries/mutations";
 import { GetBooksRentResponse } from "@/Types/types";
 import axios from "@/utils/axios";
@@ -27,6 +27,7 @@ import {
 import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 
+type BookStatus = "free" | "rented";
 type Book = {
   id: number;
   name?: string;
@@ -35,7 +36,8 @@ type Book = {
     name: string;
     imageUrl: string;
   };
-  status: boolean;
+  status: BookStatus;
+  approved: boolean;
   price: number;
 };
 
@@ -122,7 +124,8 @@ const BooksStatusTable = () => {
               "",
             imageUrl: "https://via.placeholder.com/180",
           },
-          status: bookItem.status === "free" ? true : false,
+          status: bookItem.status as BookStatus,
+          approved: bookItem.approved,
           price: bookItem.price,
         };
         return b;
@@ -172,18 +175,21 @@ const BooksStatusTable = () => {
       {
         accessorKey: "status",
         header: "Status",
-        Cell: ({ cell }) => (
-          <div className='flex items-center gap-5'>
-            <span
-              className={`size-4  rounded-full ring-1 ring-offset-2 ${
-                cell.getValue<boolean>()
-                  ? "ring-picton-500 bg-picton-500"
-                  : "ring-red-500 bg-red-500"
-              }`}
-            ></span>
-            {cell.getValue() ? "Free" : "Rented"}
-          </div>
-        ),
+        Cell: ({ cell }) => {
+          const isFree: boolean = cell.getValue<BookStatus>() === "free";
+          return (
+            <div className='flex items-center gap-5'>
+              <span
+                className={`size-4  rounded-full ring-1 ring-offset-2 ${
+                  isFree
+                    ? "ring-picton-500 bg-picton-500"
+                    : "ring-red-500 bg-red-500"
+                }`}
+              ></span>
+              {isFree ? "Free" : "Rented"}
+            </div>
+          );
+        },
         size: 220,
       },
       {
@@ -239,9 +245,11 @@ const BooksStatusTable = () => {
           <IconButton>
             <Edit color='action' />
           </IconButton>
-          <IconButton onClick={() => setDialogOpen(row.original.id)}>
-            <Delete color='warning' />
-          </IconButton>
+          <Can I='delete' an='books'>
+            <IconButton onClick={() => setDialogOpen(row.original.id)}>
+              <Delete color='warning' />
+            </IconButton>
+          </Can>
         </Box>
       );
     },
