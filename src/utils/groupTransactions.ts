@@ -92,7 +92,9 @@ export function calculatePercentageChange(
   }
 
   // Calculate percentage change
-  return ((thisMonthIncome - lastMonthIncome) / lastMonthIncome) * 100;
+  const difference =
+    ((thisMonthIncome - lastMonthIncome) / lastMonthIncome) * 100;
+  return Math.round(difference);
 }
 
 export const groupedTransactionsData: GroupedTransaction[] = [

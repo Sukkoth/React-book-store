@@ -55,7 +55,8 @@ function IncomeCard() {
           </div>
           <div className='mt-5'>
             <p className='text-gray-500 text-lg md:text-xl font-light'>
-              Compared to ETB{thisMonthAmount - lastMonthAmount} last month
+              Compared to ETB{Math.round(thisMonthAmount - lastMonthAmount)}{" "}
+              last month
             </p>
             <div className='inline-flex gap-4'>
               <p>Last Month Income</p>

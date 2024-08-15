@@ -15,8 +15,6 @@ export default function BasicArea() {
     userType,
   ]);
 
-  console.log("Balance", balanceData);
-
   const transactions = balanceData?.transactions;
   const groupedData = transactions
     ? groupAndSortTransactions(transactions)
