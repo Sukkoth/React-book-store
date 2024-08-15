@@ -139,3 +139,25 @@ export interface Wallets {
   updatedAt: Date | null;
   owner: Owner; // Relation
 }
+
+export interface Transaction {
+  id: number;
+  amount: number;
+  createdAt: string;
+  userId: number;
+  rentalId: number;
+}
+
+export interface Wallet {
+  id: number;
+  ownerId: number;
+  balance: number;
+  createdAt: string;
+  status: string;
+  updatedAt: string;
+}
+
+export interface WalletTransactions {
+  wallet: Wallet;
+  transactions: Transaction[];
+}

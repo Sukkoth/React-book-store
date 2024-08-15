@@ -2,6 +2,7 @@ import {
   BooksListResponse,
   Category,
   CategoryStatsResponse,
+  WalletTransactions,
 } from "@/Types/types";
 import axios from "@/utils/axios";
 
@@ -71,5 +72,10 @@ export async function APPROVE_OWNER({
     approved,
     status,
   });
+  return res.data;
+}
+
+export async function GET_OWNER_BALANCE() {
+  const res = await axios.get<WalletTransactions>("/owners/balance");
   return res.data;
 }

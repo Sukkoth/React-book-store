@@ -3,6 +3,7 @@ import {
   GET_BOOKS_LIST,
   GET_CATEGORIES,
   GET_CATEGORY_STATS,
+  GET_OWNER_BALANCE,
 } from "@/services/services";
 import {
   BookRent,
@@ -39,5 +40,12 @@ export function useGetBooksRentList({ forAdmin }: { forAdmin: boolean }) {
   return useQuery<BookRent[]>({
     queryKey: ["booksList"],
     queryFn: () => GET_RENT_BOOKS({ forAdmin }),
+  });
+}
+
+export function useGetOwnerBalance() {
+  return useQuery({
+    queryKey: ["ownerBalance"],
+    queryFn: GET_OWNER_BALANCE,
   });
 }
