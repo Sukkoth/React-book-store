@@ -1,9 +1,10 @@
+import { useAuth } from "@/Providers/AuthProvider";
 import { GET_RENT_BOOKS } from "@/services/ownerServices/booksService";
 import {
+  GET_BALANCE,
   GET_BOOKS_LIST,
   GET_CATEGORIES,
   GET_CATEGORY_STATS,
-  GET_OWNER_BALANCE,
 } from "@/services/services";
 import {
   BookRent,
@@ -43,9 +44,10 @@ export function useGetBooksRentList({ forAdmin }: { forAdmin: boolean }) {
   });
 }
 
-export function useGetOwnerBalance() {
+export function useGetBalance() {
+  const { userType } = useAuth();
   return useQuery({
     queryKey: ["ownerBalance"],
-    queryFn: GET_OWNER_BALANCE,
+    queryFn: () => GET_BALANCE(userType!),
   });
 }

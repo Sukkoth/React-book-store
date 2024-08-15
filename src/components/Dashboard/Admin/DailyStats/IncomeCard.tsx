@@ -1,4 +1,4 @@
-import { useGetOwnerBalance } from "@/queries/queries";
+import { useGetBalance } from "@/queries/queries";
 import {
   calculatePercentageChange,
   getTotalAmountForPeriod,
@@ -7,7 +7,7 @@ import {
 
 function IncomeCard() {
   const currentDate = new Date();
-  const getOwnerBalance = useGetOwnerBalance();
+  const getOwnerBalance = useGetBalance();
   const balance = getOwnerBalance.data?.wallet.balance;
   const groupedTransactions = getOwnerBalance.data
     ? groupAndSortTransactions(getOwnerBalance.data?.transactions)

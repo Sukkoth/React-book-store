@@ -75,7 +75,7 @@ export async function APPROVE_OWNER({
   return res.data;
 }
 
-export async function GET_OWNER_BALANCE() {
-  const res = await axios.get<WalletTransactions>("/owners/balance");
+export async function GET_BALANCE(userType: string) {
+  const res = await axios.get<WalletTransactions>(`/${userType}s/balance`);
   return res.data;
 }
