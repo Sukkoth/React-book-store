@@ -47,7 +47,7 @@ export function useGetBooksRentList({ forAdmin }: { forAdmin: boolean }) {
 export function useGetBalance() {
   const { userType } = useAuth();
   return useQuery({
-    queryKey: ["ownerBalance"],
+    queryKey: ["balance", userType],
     queryFn: () => GET_BALANCE(userType!),
   });
 }

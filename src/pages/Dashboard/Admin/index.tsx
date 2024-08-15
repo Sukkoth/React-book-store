@@ -1,5 +1,6 @@
 import BookStatus from "@/components/Dashboard/BookStatus";
 import DailyStats from "../../../components/Dashboard/Admin/DailyStats";
+import LineChart from "@/components/LineChart";
 
 function index() {
   return (
@@ -14,7 +15,7 @@ function index() {
           {/* <BooksTable /> */}
         </div>
         <div className='bg-white w-full mt-5 h-full p-5 rounded-xl shadow-lg shadow-gray-100 pt-10 '>
-          Earnings
+          <LineChart />
         </div>
       </div>
     </div>
