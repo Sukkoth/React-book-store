@@ -92,11 +92,14 @@ const OwnersTable = () => {
             ...params,
             pageSize: pagination.pageSize,
             page: pagination.pageIndex + 1,
-            // uploads: {
-            //   equals: params.uploads || undefined,
-            // },
+            status:
+              params.status === "Active"
+                ? "active"
+                : params.status === "Inactive"
+                ? "inactive"
+                : undefined,
             location: params.location,
-            status: params.status,
+
             sortField: sorting.length
               ? sorting[0].id === "owner"
                 ? "name"
@@ -216,6 +219,8 @@ const OwnersTable = () => {
             </span>
           );
         },
+        filterVariant: "select",
+        filterSelectOptions: ["Active", "Inactive"],
         size: 100,
       },
     ],
