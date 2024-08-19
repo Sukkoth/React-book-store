@@ -1,5 +1,5 @@
 import { Admin, Owner } from "@/Types/GlobalTypes";
-import { createContext, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // Define the type for auth context
@@ -65,7 +65,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       : localStorage.setItem("token", userToken);
   }
 
-  function handleLogout(redirectTo: string | null = null) {
+  const handleLogout = useCallback((redirectTo: string | null = null) => {
     setUser(null);
     setToken(null);
     setUserType(null);
@@ -76,7 +76,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       return navigate(redirectTo);
     }
     return navigate("/");
-  }
+  }, []);
 
   return (
     <AuthContext.Provider

@@ -24,15 +24,14 @@ function IncomeCard() {
     currentDate.getMonth(),
     groupedTransactions
   );
-  const differencePercentage = calculatePercentageChange(
-    lastMonthAmount,
-    thisMonthAmount
+  const differencePercentage = Math.round(
+    calculatePercentageChange(lastMonthAmount, thisMonthAmount)
   );
   return (
     <div className='p-5 shadow-lg rounded-md shadow-gray-100 w-full'>
       {getOwnerBalance.isLoading ? (
         <div className='h-full'>
-          <p>Loading . . .</p>
+          <p className='animate-pulse'>Loading . . .</p>
         </div>
       ) : (
         <>
@@ -43,7 +42,9 @@ function IncomeCard() {
             </div>
           </div>
           <div className='pt-5 flex items-end gap-2'>
-            <h1 className='font-bold text-xl md:text-3xl'>ETB ${balance}</h1>
+            <h1 className='font-bold text-xl md:text-3xl'>
+              ETB ${balance?.toFixed(2)}
+            </h1>
             <div
               className={`${
                 differencePercentage < 0 ? "text-red-500" : "text-green-500"

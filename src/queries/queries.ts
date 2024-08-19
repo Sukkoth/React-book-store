@@ -6,13 +6,16 @@ import {
   GET_CATEGORIES,
   GET_CATEGORY_STATS,
 } from "@/services/services";
+import { Admin, Owner, User } from "@/Types/GlobalTypes";
 import {
   BookRent,
   BooksListResponse,
   Category,
   CategoryStatItem,
 } from "@/Types/types";
+import axios from "@/utils/axios";
 import { useQuery } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 
 export function useCategoryStats() {
   return useQuery<CategoryStatItem[]>({
@@ -23,7 +26,7 @@ export function useCategoryStats() {
 }
 
 export function useGetCategories() {
-  return useQuery<Category[]>({
+  return useQuery<Category[], AxiosError>({
     queryKey: ["categories"],
     queryFn: GET_CATEGORIES,
     staleTime: 7200, //every 2 hrs
@@ -49,5 +52,15 @@ export function useGetBalance() {
   return useQuery({
     queryKey: ["balance", userType],
     queryFn: () => GET_BALANCE(userType!),
+  });
+}
+
+export function useGetUser() {
+  return useQuery<Owner | Admin | User, AxiosError>({
+    queryKey: ["authUser"],
+    queryFn: async () => {
+      const { data } = await axios.get("/getUser");
+      return data;
+    },
   });
 }

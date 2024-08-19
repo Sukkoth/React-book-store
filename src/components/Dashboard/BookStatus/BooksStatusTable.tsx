@@ -185,10 +185,12 @@ const BooksStatusTable = () => {
                     : "ring-red-500 bg-red-500"
                 }`}
               ></span>
-              {isFree ? "Free" : "Rented"}
+              {isFree ? "free" : "rented"}
             </div>
           );
         },
+        filterVariant: "select",
+        filterSelectOptions: ["Free", "Rented"],
         size: 220,
       },
       {
@@ -264,12 +266,15 @@ const BooksStatusTable = () => {
       >
         <DialogTitle id='alert-dialog-title'>Delete Book</DialogTitle>
         <DialogContent>
-          <DialogContentText id='alert-dialog-description'>
-            <div className='w-[30rem]'>
-              {handleDeleteBook.isPending
-                ? "Deleting Book . . ."
-                : "Are you sure you want to delete this book?"}
-            </div>
+          <DialogContentText
+            id='alert-dialog-description'
+            sx={{
+              width: "30rem",
+            }}
+          >
+            {handleDeleteBook.isPending
+              ? "Deleting Book . . ."
+              : "Are you sure you want to delete this book?"}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

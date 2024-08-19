@@ -1,22 +1,41 @@
 import { Route, Routes } from "react-router-dom";
 
-import "./index.css";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
+import "./index.css";
 
-import AppRoutes from "@/Routes";
 import AuthLayout from "@/Layouts/AuthLayout";
-import DashboardLayout from "@/Layouts/DashboardLayout";
 import AuthOutlet from "@/Layouts/AuthOutlet";
 import CASLOutlet from "@/Layouts/CASLOutlet";
-import { useGetCategories } from "@/queries/queries";
+import DashboardLayout from "@/Layouts/DashboardLayout";
+import { useGetCategories, useGetUser } from "@/queries/queries";
+import AppRoutes from "@/Routes";
+import { useEffect } from "react";
+import { PuffLoader } from "react-spinners";
 import LoginOutlet from "./Layouts/LoginOutlet";
+import { useAuth } from "./Providers/AuthProvider";
 
 function App() {
   useGetCategories();
-  return (
+  const { handleLogout } = useAuth();
+  const { isLoading, error } = useGetUser();
+
+  useEffect(() => {
+    if (error?.response?.status) {
+      handleLogout();
+    }
+  }, [error?.response?.status]);
+
+  return isLoading ? (
+    <div className='h-[100dvh] w-full flex flex-col items-center justify-center'>
+      <PuffLoader color='#38459b' size={100} />
+      <h1 className='font-medium uppercase text-xl py-6 animate-pulse text-midnight-950'>
+        Loading
+      </h1>
+    </div>
+  ) : (
     <Routes>
       <Route index element={<AppRoutes.home.index />} />
       <Route path='/auth' element={<AuthLayout />}>

@@ -1,5 +1,5 @@
 import { useApproveRentBook } from "@/queries/mutations";
-import { GetBooksRentResponse } from "@/Types/types";
+import { Category, GetBooksRentResponse } from "@/Types/types";
 import axios from "@/utils/axios";
 import { Refresh } from "@mui/icons-material";
 import {
@@ -9,7 +9,12 @@ import {
   TableContainer,
   Tooltip,
 } from "@mui/material";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { validateTime } from "@mui/x-date-pickers/internals";
+import {
+  keepPreviousData,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -34,6 +39,12 @@ type Book = {
   approved: boolean;
 };
 const BooksTable = () => {
+  const queryClient = useQueryClient();
+
+  const categories = queryClient.getQueryData(["categories"]) as Category[];
+  const categoriesList = categories.map((item) =>
+    item.name.toLocaleLowerCase()
+  );
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(
     []
   );
@@ -62,6 +73,7 @@ const BooksTable = () => {
           status?: string;
           price?: string;
           bookName?: string;
+          approved?: string;
         } = {};
 
         columnFilters.forEach((col) => {
@@ -79,6 +91,13 @@ const BooksTable = () => {
             bookNo: {
               equals: params.bookNo || undefined,
             },
+            approved:
+              params.approved === "Active"
+                ? true
+                : params.approved === "Inactive"
+                ? false
+                : undefined,
+
             sortField: sorting.length
               ? sorting[0].id === "name"
                 ? "bookName"
@@ -146,6 +165,8 @@ const BooksTable = () => {
       {
         accessorKey: "category",
         header: "Category",
+        filterVariant: "select",
+        filterSelectOptions: categoriesList,
         size: 100,
       },
       {
@@ -197,6 +218,8 @@ const BooksTable = () => {
             </div>
           );
         },
+        filterVariant: "select",
+        filterSelectOptions: ["Active", "Inactive"],
         size: 100,
       },
     ],
