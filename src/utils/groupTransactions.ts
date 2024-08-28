@@ -9,6 +9,7 @@ type Transaction = {
 type GroupedTransaction = {
   year: number;
   month: number;
+  monthName: string;
   transactions: Transaction[];
   sum: number;
 };
@@ -41,6 +42,7 @@ export function groupAndSortTransactions(
     return {
       year,
       month,
+      monthName: matchMonthWithIndex(month),
       transactions: grouped[key],
       sum: grouped[key].reduce((sum, groupItem) => {
         return sum + groupItem.amount;
@@ -95,4 +97,23 @@ export function calculatePercentageChange(
   const difference =
     ((thisMonthIncome - lastMonthIncome) / lastMonthIncome) * 100;
   return Math.round(difference);
+}
+
+export function matchMonthWithIndex(index: number) {
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sept",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  return monthNames[index - 1] || "";
 }

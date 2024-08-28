@@ -109,7 +109,7 @@ const BooksStatusTable = () => {
 
   const abilities = useAbility();
 
-  const isEditor = abilities.can("edit", "books");
+  const isEditor = abilities.can("read", "OwnerDashboard");
 
   const parsedData = data
     ? data.books.map((bookItem) => {
@@ -246,7 +246,7 @@ const BooksStatusTable = () => {
           <IconButton>
             <Edit color='action' />
           </IconButton>
-          <Can I='delete' an='books'>
+          <Can I='read' a='OwnerDashboard'>
             <IconButton onClick={() => setDialogOpen(row.original.id)}>
               <Delete color='warning' />
             </IconButton>
