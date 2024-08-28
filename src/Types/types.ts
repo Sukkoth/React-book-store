@@ -1,4 +1,4 @@
-import { Users } from "./GlobalTypes";
+import { Owner, Users } from "./GlobalTypes";
 
 export interface CategoryStatsResponse {
   code: number | string;
@@ -97,25 +97,6 @@ export interface OwnerToBooks {
   bookInfo: Book; // Relation
   owners: Owner; // Relation
   rentals?: Rentals[]; // Relation
-}
-
-export interface Owner {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  location: string;
-  status: string;
-  approved: boolean;
-  permissions: Record<string, unknown>;
-  createdAt: Date;
-  updatedAt: Date | null;
-  books: OwnerToBooks[]; // Relation
-  _count?: {
-    books: number;
-  };
-  wallet: Wallets[]; // Relation
 }
 
 export interface GetOwnersResponse {

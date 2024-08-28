@@ -1,3 +1,6 @@
+import { AppAbility } from "@/utils/permissions";
+import { RawRuleOf } from "@casl/ability";
+
 export type Admin = {
   id: number;
   firstName: string;
@@ -6,7 +9,11 @@ export type Admin = {
   phone: string;
   location: string;
   status: string;
-  permissions: Record<string, unknown>; // JSON field
+  role: {
+    id: number;
+    name: string;
+    permissions: RawRuleOf<AppAbility>[];
+  };
   createdAt: Date;
   updatedAt: Date | null;
 };
@@ -55,7 +62,11 @@ export type Owner = {
   location: string;
   status: string;
   approved: boolean;
-  permissions: Record<string, unknown>; // JSON field
+  role: {
+    id: number;
+    name: string;
+    permissions: RawRuleOf<AppAbility>[];
+  };
   createdAt: Date;
   updatedAt: Date | null;
   books: OwnerToBooks[]; // Relation

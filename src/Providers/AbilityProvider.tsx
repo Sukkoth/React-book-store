@@ -1,20 +1,20 @@
 import React, { createContext, ReactNode, useContext, useMemo } from "react";
 import { createContextualCan } from "@casl/react";
-import defineAbility, { AppAbility } from "@/utils/ability";
+import { AppAbility } from "@/utils/permissions";
 import { useAuth } from "./AuthProvider";
+import { createAbility } from "@/utils/permissions";
+import { RawRuleOf } from "@casl/ability";
 
-// Create a default instance for AppAbility as a fallback
-// const defaultAbility = defineAbility("guest"); // Or any other default role
-
-// Create a context for AppAbility
 const AbilityContext = createContext<AppAbility | undefined>(undefined);
 
-// AbilityProvider will pass the AppAbility instance directly
 export const AbilityProvider: React.FC<{
   children: ReactNode;
 }> = ({ children }) => {
-  const { userType } = useAuth();
-  const ability = useMemo(() => defineAbility(userType || "guest"), [userType]);
+  const { userType, user } = useAuth();
+  const ability = useMemo(
+    () => createAbility(user?.role.permissions as RawRuleOf<AppAbility>[]),
+    [userType]
+  );
 
   return (
     <AbilityContext.Provider value={ability}>

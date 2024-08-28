@@ -34,29 +34,6 @@ export interface SignupResponse {
   userType: string;
 }
 
-// {
-
-//   "user": {
-//       "id": "2",
-//       "firstName": "Sukkoth",
-//       "lastName": "Teklu",
-//       "email": "suukootj@gmail.commmm",
-//       "phone": "092514383112342",
-//       "location": "Addis Ababa",
-//       "status": "active",
-//       "permissions": [
-//           "UPDATE_BOOK_STATUS",
-//           "UPDATE_OWNER_STATUS",
-//           "DELETE_OWNER",
-//           "APPROVE_OWNER"
-//       ],
-//       "createdAt": "2024-08-13T08:18:50.000Z",
-//       "updatedAt": "2024-08-13T08:18:50.000Z"
-//   },
-//   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIiLCJ1c2VyVHlwZSI6ImFkbWluIiwiaWF0IjoxNzIzNTM3MTMwLCJleHAiOjE3MjM3OTYzMzB9.e9tm5yWnGMA_UchJa8pvUHUWJkRKXqzB5nvsgA6ohoE",
-//   "userType": "admin"
-// }
-
 export interface LoginCredentials {
   email: string;
   password: string;

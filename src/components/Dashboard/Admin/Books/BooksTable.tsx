@@ -1,3 +1,4 @@
+import { useAbility } from "@/Providers/AbilityProvider";
 import { useApproveRentBook } from "@/queries/mutations";
 import { Category, GetBooksRentResponse } from "@/Types/types";
 import axios from "@/utils/axios";
@@ -39,6 +40,7 @@ type Book = {
 };
 const BooksTable = () => {
   const queryClient = useQueryClient();
+  const userAbility = useAbility();
 
   const categories = queryClient.getQueryData(["categories"]) as Category[];
   const categoriesList = categories.map((item) =>
@@ -178,7 +180,6 @@ const BooksTable = () => {
         header: "Approved",
         Cell: ({ cell, row }) => {
           const approved = cell.getValue<boolean>();
-          console.log("APPROVED", approved);
 
           return (
             <div
@@ -193,6 +194,7 @@ const BooksTable = () => {
               </p>
               <Switch
                 defaultChecked={approved}
+                disabled={userAbility.cannot("manage", "OwnerToBooks")}
                 onChange={() => {
                   handleApproveBook.mutateAsync(
                     {

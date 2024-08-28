@@ -27,9 +27,10 @@ import ViewModal from "./ViewModal";
 import { GetOwnersResponse } from "@/Types/types";
 import axios from "@/utils/axios";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { Can } from "@/Providers/AbilityProvider";
+import { Can, useAbility } from "@/Providers/AbilityProvider";
 import { useApproveOwner, useDeleteOwner } from "@/queries/mutations";
 import toast from "react-hot-toast";
+import { useAuth } from "@/Providers/AuthProvider";
 
 export type BookOwner = {
   id: number;
@@ -46,6 +47,8 @@ export type BookOwner = {
 };
 
 const OwnersTable = () => {
+  const { user } = useAuth();
+  const userAbility = useAbility();
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(
     []
   );
@@ -195,6 +198,7 @@ const OwnersTable = () => {
             >
               <span>{cell.getValue() ? "Active" : "Inactive"}</span>
               <Switch
+                disabled={userAbility.cannot("manage", "Owners")}
                 defaultChecked={cell.getValue<boolean>()}
                 color='success'
                 size='small'
@@ -277,42 +281,47 @@ const OwnersTable = () => {
           >
             <Visibility color='action' />
           </IconButton>
-          <Can I='delete' an='owner'>
+          <Can I='manage' an='Owners'>
             <IconButton onClick={() => setDialogOpen(bookOwner.id)}>
               <Delete color='warning' />
             </IconButton>
+
+            <Button
+              disableElevation
+              variant='contained'
+              onClick={() => {
+                handleApproveOwner.mutateAsync(
+                  {
+                    ownerId: bookOwner.id,
+                    approved: row.getValue<ownerType>("owner").approved
+                      ? "false"
+                      : "true",
+                  },
+                  {
+                    onSuccess: () => {
+                      toast.success("Owner approved");
+                      refetch();
+                    },
+                    onError: () => {
+                      toast.error("Could not approve owner");
+                    },
+                  }
+                );
+              }}
+              color={
+                row.getValue<ownerType>("owner").approved
+                  ? "primary"
+                  : "inherit"
+              }
+              sx={{
+                marginLeft: "6rem",
+              }}
+            >
+              {row.getValue<ownerType>("owner").approved
+                ? "Approved"
+                : "Approve"}
+            </Button>
           </Can>
-          <Button
-            disableElevation
-            variant='contained'
-            onClick={() => {
-              handleApproveOwner.mutateAsync(
-                {
-                  ownerId: bookOwner.id,
-                  approved: row.getValue<ownerType>("owner").approved
-                    ? "false"
-                    : "true",
-                },
-                {
-                  onSuccess: () => {
-                    toast.success("Owner approved");
-                    refetch();
-                  },
-                  onError: () => {
-                    toast.error("Could not approve owner");
-                  },
-                }
-              );
-            }}
-            color={
-              row.getValue<ownerType>("owner").approved ? "primary" : "inherit"
-            }
-            sx={{
-              marginLeft: "6rem",
-            }}
-          >
-            {row.getValue<ownerType>("owner").approved ? "Approved" : "Approve"}
-          </Button>
         </Box>
       );
     },

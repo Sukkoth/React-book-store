@@ -5,17 +5,14 @@ import NoEnoughPermission from "./NoEnoughPermission";
 function CASLOutlet({ type }: { type: "admin" | "owner" }) {
   return (
     <>
-      <Can
-        I='view'
-        a={type === "admin" ? "admin-dashboard" : "owner-dashboard"}
-      >
+      <Can I='read' an={type === "admin" ? "AdminDashboard" : "OwnerDashboard"}>
         <Outlet />
       </Can>
 
       <Can
-        I='view'
+        I='read'
         not
-        a={type === "admin" ? "admin-dashboard" : "owner-dashboard"}
+        an={type === "admin" ? "AdminDashboard" : "OwnerDashboard"}
       >
         <NoEnoughPermission />
       </Can>

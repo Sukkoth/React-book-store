@@ -9,7 +9,6 @@ import SidebarHeader from "./SidebarHeader";
 import SidebarItem from "./SidebarItem";
 import SidebarLogoutButton from "./SidebarLogoutButton";
 import { useSidebar } from "./SidebarProvider";
-import { Can } from "@/Providers/AbilityProvider";
 import { useAuth } from "@/Providers/AuthProvider";
 
 type LinksType = {
@@ -21,7 +20,7 @@ type LinksType = {
 
 function Sidebar() {
   const { showIconsOnly } = useSidebar();
-  const { handleLogout } = useAuth();
+  const { handleLogout, userType } = useAuth();
 
   const adminItems: Array<LinksType[]> = [
     [
@@ -84,8 +83,8 @@ function Sidebar() {
       <SidebarHeader />
       {/* sidebar content */}
       <Box>
-        <Can I='view' a='admin-links'>
-          {adminItems.map((menuList, index) => (
+        {userType === "admin" &&
+          adminItems.map((menuList, index) => (
             <SidebarGroup key={`menuList-${index}`}>
               {menuList.map((menuItem) => (
                 <SidebarItem
@@ -98,9 +97,9 @@ function Sidebar() {
               ))}
             </SidebarGroup>
           ))}
-        </Can>
-        <Can I='view' a='owner-links'>
-          {ownerItems.map((menuList, index) => (
+
+        {userType === "owner" &&
+          ownerItems.map((menuList, index) => (
             <SidebarGroup key={`menuList-${index}`}>
               {menuList.map((menuItem) => (
                 <SidebarItem
@@ -113,7 +112,6 @@ function Sidebar() {
               ))}
             </SidebarGroup>
           ))}
-        </Can>
       </Box>
 
       <SidebarLogoutButton />
