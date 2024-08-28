@@ -12,7 +12,7 @@ export const AbilityProvider: React.FC<{
 }> = ({ children }) => {
   const { userType, user } = useAuth();
   const ability = useMemo(
-    () => createAbility(user?.role.permissions as RawRuleOf<AppAbility>[]),
+    () => createAbility(user?.role?.permissions as RawRuleOf<AppAbility>[]),
     [userType]
   );
 
