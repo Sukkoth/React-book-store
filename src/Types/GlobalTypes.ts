@@ -67,6 +67,9 @@ export type Owner = {
     name: string;
     permissions: RawRuleOf<AppAbility>[];
   };
+  _count?: {
+    books: number;
+  };
   createdAt: Date;
   updatedAt: Date | null;
   books: OwnerToBooks[]; // Relation

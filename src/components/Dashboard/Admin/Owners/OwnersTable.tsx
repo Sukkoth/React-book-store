@@ -30,7 +30,6 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { Can, useAbility } from "@/Providers/AbilityProvider";
 import { useApproveOwner, useDeleteOwner } from "@/queries/mutations";
 import toast from "react-hot-toast";
-import { useAuth } from "@/Providers/AuthProvider";
 
 export type BookOwner = {
   id: number;
@@ -47,7 +46,6 @@ export type BookOwner = {
 };
 
 const OwnersTable = () => {
-  const { user } = useAuth();
   const userAbility = useAbility();
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(
     []
